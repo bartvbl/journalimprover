@@ -7,8 +7,12 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.swing.DefaultListModel;
+import javax.swing.DefaultListSelectionModel;
+import javax.swing.ListSelectionModel;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
 import data.Paper;
@@ -18,7 +22,7 @@ import lib.events.EventDispatcher;
 import lib.events.EventHandler;
 import lib.events.EventType;
 
-public class PaperBase implements ActionListener, CaretListener, EventHandler {
+public class PaperBase implements ActionListener, CaretListener, EventHandler, ListSelectionListener {
 
 	private final PaperTrackerWindow window;
 	private final EventDispatcher eventDispatcher;
@@ -26,17 +30,25 @@ public class PaperBase implements ActionListener, CaretListener, EventHandler {
 	private final DefaultTableModel paperTableModel;
 	
 	private final HashSet<Paper> paperCollection = new HashSet<Paper>();
+	private final DefaultListSelectionModel paperTableSelectionModel;
+	
+	private Paper[] currentDisplayedPapers = new Paper[0];
 
 	public PaperBase(PaperTrackerWindow window, EventDispatcher mainDispatcher) {
 		this.window = window;
 		this.eventDispatcher = mainDispatcher;
 		
 		this.paperTableModel = new DefaultTableModel();
+		this.paperTableSelectionModel = new DefaultListSelectionModel();
 		
 		paperTableModel.setColumnCount(2);
 		paperTableModel.setColumnIdentifiers(new String[]{"Date", "Title"});
 		
+		paperTableSelectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		paperTableSelectionModel.addListSelectionListener(this);
+		
 		window.paperTable.setModel(paperTableModel);
+		window.paperTable.setSelectionModel(paperTableSelectionModel);
 		
 		window.searchPapersField.addCaretListener(this);
 		window.addRelevantPaperButton.addActionListener(this);
@@ -67,6 +79,7 @@ public class PaperBase implements ActionListener, CaretListener, EventHandler {
 	private void updatePaperList() {
 		String searchQuery = window.searchPapersField.getText();
 		Paper[] relevantPapers = filter(searchQuery);
+		this.currentDisplayedPapers  = relevantPapers;
 		paperTableModel.setRowCount(0);
 		for(Paper paper : relevantPapers) {
 			paperTableModel.addRow(new String[]{paper.publicationDate, paper.title});
@@ -90,6 +103,16 @@ public class PaperBase implements ActionListener, CaretListener, EventHandler {
 			return paperCollection.toArray(new Paper[paperCollection.size()]);
 		}
 		
+	}
+
+	@Override
+	public void valueChanged(ListSelectionEvent event) {
+		int index = paperTableSelectionModel.getLeadSelectionIndex();
+		if(index < 0 || index >= currentDisplayedPapers.length) {
+			return;
+		}
+		Paper selectedPaper = currentDisplayedPapers[index];
+		eventDispatcher.dispatchEvent(new Event<Paper>(EventType.PAPER_SELECTED, selectedPaper));
 	}
 
 }

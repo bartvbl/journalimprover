@@ -2,6 +2,6 @@ package lib.events;
 
 public enum EventType 
 {
-	IMPORT_PAPER
+	IMPORT_PAPER, PAPER_SELECTED
 	
 }
