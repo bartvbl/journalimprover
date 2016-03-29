@@ -26,9 +26,9 @@ public class PaperDisplayer implements EventHandler {
 
 	private void updateWindow() {
 		window.paperAbstractField.setText(currentSelectedPaper.abstractText);
-		window.paperTitleLabel.setText(currentSelectedPaper.title);
-		window.paperDateLabel.setText(currentSelectedPaper.publicationDate);
-		window.paperAuthorLabel.setText(currentSelectedPaper.authors);
+		window.paperTitleLabel.setText("<html>" + currentSelectedPaper.title.replaceAll("\n", "<br>"));
+		window.paperDateLabel.setText("<html>" + currentSelectedPaper.publicationDate.replaceAll("\n", "<br>"));
+		window.paperAuthorLabel.setText("<html>" + currentSelectedPaper.authors.replaceAll("\n", "<br>"));
 	}
 
 	@Override

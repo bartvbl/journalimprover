@@ -19,6 +19,7 @@ import javax.swing.table.DefaultTableModel;
 import cache.PaperBaseCache;
 import data.Paper;
 import gui.PaperTrackerWindow;
+import gui.ProgressWindow;
 import lib.events.Event;
 import lib.events.EventDispatcher;
 import lib.events.EventHandler;
@@ -55,7 +56,7 @@ public class PaperBase implements ActionListener, CaretListener, EventHandler, L
 		window.searchPapersField.addCaretListener(this);
 		window.addRelevantPaperButton.addActionListener(this);
 		
-		eventDispatcher.addEventListener(this, EventType.IMPORT_PAPER);
+		eventDispatcher.addEventListener(this, EventType.IMPORT_PAPERS);
 		
 		paperCollection = PaperBaseCache.load();
 		
@@ -73,13 +74,18 @@ public class PaperBase implements ActionListener, CaretListener, EventHandler, L
 
 	@Override
 	public void handleEvent(Event<?> event) {
-		if(event.eventType == EventType.IMPORT_PAPER) {
-			Paper paper = (Paper) event.getEventParameterObject();
-			if(!paperCollection.contains(paper)) {
-				paperCollection.add(paper);
-				updatePaperList();
-				PaperBaseCache.store(paperCollection);
+		if(event.eventType == EventType.IMPORT_PAPERS) {
+			Paper[] loadedPapers = (Paper[]) event.getEventParameterObject();
+			ProgressWindow progressWindow = new ProgressWindow(window, loadedPapers.length, "Import progress");
+			for(Paper paper : loadedPapers) {
+				if(!paperCollection.contains(paper)) {
+					paperCollection.add(paper);
+					updatePaperList();
+				}
+				progressWindow.incrementProgress(1);
 			}
+			PaperBaseCache.store(paperCollection);
+			progressWindow.destroy();
 		}
 	}
 

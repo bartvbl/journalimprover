@@ -70,7 +70,7 @@ public class PaperLoader {
 			
 			for(int i = 2; i < tableDatas.size(); i++) {
 				Element dataElement = tableDatas.get(i);
-				dataElementContents += ", " + dataElement.getValue();
+				dataElementContents += "\n" + dataElement.getValue();
 			}
 			
 			String key = keyElement.getValue().trim();

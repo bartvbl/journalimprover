@@ -38,12 +38,7 @@ public class PaperImportHandler implements ActionListener {
 			new WorkerThread(new Runnable() {
 				public void run() {
 					Paper[] loadedPapers = PaperLoader.loadPapers(chosenFile, window);
-					ProgressWindow progressWindow = new ProgressWindow(window, loadedPapers.length, "Import progress");
-					for(Paper paper : loadedPapers) {
-						eventDispatcher.dispatchEvent(new Event<Paper>(EventType.IMPORT_PAPER, paper));
-						progressWindow.incrementProgress(1);
-					}
-					progressWindow.destroy();
+					eventDispatcher.dispatchEvent(new Event<Paper[]>(EventType.IMPORT_PAPERS, loadedPapers));
 				}
 			}).start();
 		}
