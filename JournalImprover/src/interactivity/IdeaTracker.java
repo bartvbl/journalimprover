@@ -76,6 +76,7 @@ public class IdeaTracker implements EventHandler {
 				if(answer == JOptionPane.OK_OPTION) {
 					ideaList.remove(selectedIndex);
 					currentSelectedIdea = null;
+					selectedIdeaIndex = -1;
 					refreshIdeas();				
 				}				
 			}
