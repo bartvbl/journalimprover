@@ -9,6 +9,7 @@ import java.util.Set;
 import javax.swing.DefaultListModel;
 import javax.swing.DefaultListSelectionModel;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingUtilities;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 import javax.swing.event.ListSelectionEvent;
@@ -85,11 +86,16 @@ public class PaperBase implements ActionListener, CaretListener, EventHandler, L
 	private void updatePaperList() {
 		String searchQuery = window.searchPapersField.getText();
 		Paper[] relevantPapers = filter(searchQuery);
-		this.currentDisplayedPapers  = relevantPapers;
-		paperTableModel.setRowCount(0);
-		for(Paper paper : relevantPapers) {
-			paperTableModel.addRow(new String[]{paper.publicationDate, paper.title});
-		}
+		this.currentDisplayedPapers = relevantPapers;
+		SwingUtilities.invokeLater(new Runnable(){
+			public void run() {
+				paperTableModel.setRowCount(0);
+				
+				for(Paper paper : relevantPapers) {
+					paperTableModel.addRow(new String[]{paper.publicationDate, paper.title});
+				}
+			}
+		});
 	}
 
 	private Paper[] filter(String searchQuery) {
