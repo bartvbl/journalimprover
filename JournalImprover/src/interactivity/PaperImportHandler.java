@@ -8,6 +8,7 @@ import javax.swing.JFileChooser;
 
 import data.Paper;
 import gui.PaperTrackerWindow;
+import gui.ProgressWindow;
 import lib.events.Event;
 import lib.events.EventDispatcher;
 import lib.events.EventType;
@@ -34,9 +35,12 @@ public class PaperImportHandler implements ActionListener {
 		if(result == JFileChooser.APPROVE_OPTION) {
 			File chosenFile = fileChooser.getSelectedFile();
 			Paper[] loadedPapers = PaperLoader.loadPapers(chosenFile, window);
+			ProgressWindow progressWindow = new ProgressWindow(window, loadedPapers.length, "Import progress");
 			for(Paper paper : loadedPapers) {
 				eventDispatcher.dispatchEvent(new Event<Paper>(EventType.IMPORT_PAPER, paper));
+				progressWindow.incrementProgress(1);
 			}
+			progressWindow.destroy();
 		}
 	}
 
