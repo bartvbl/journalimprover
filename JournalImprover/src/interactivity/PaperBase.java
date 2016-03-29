@@ -24,6 +24,7 @@ import lib.events.Event;
 import lib.events.EventDispatcher;
 import lib.events.EventHandler;
 import lib.events.EventType;
+import lib.util.WorkerThread;
 
 public class PaperBase implements ActionListener, CaretListener, EventHandler, ListSelectionListener {
 
@@ -90,18 +91,22 @@ public class PaperBase implements ActionListener, CaretListener, EventHandler, L
 	}
 
 	private void updatePaperList() {
-		String searchQuery = window.searchPapersField.getText();
-		Paper[] relevantPapers = filter(searchQuery);
-		this.currentDisplayedPapers = relevantPapers;
-		SwingUtilities.invokeLater(new Runnable(){
+		new WorkerThread(new Runnable() {
 			public void run() {
-				paperTableModel.setRowCount(0);
-				
-				for(Paper paper : relevantPapers) {
-					paperTableModel.addRow(new String[]{paper.publicationDate, paper.title});
-				}
+				String searchQuery = window.searchPapersField.getText();
+				Paper[] relevantPapers = filter(searchQuery);
+				currentDisplayedPapers = relevantPapers;
+				SwingUtilities.invokeLater(new Runnable(){
+					public void run() {
+						paperTableModel.setRowCount(0);
+						
+						for(Paper paper : relevantPapers) {
+							paperTableModel.addRow(new String[]{paper.publicationDate, paper.title});
+						}
+					}
+				});
 			}
-		});
+		}).start();
 	}
 
 	private Paper[] filter(String searchQuery) {
