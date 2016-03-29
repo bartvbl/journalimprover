@@ -15,6 +15,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
+import cache.PaperBaseCache;
 import data.Paper;
 import gui.PaperTrackerWindow;
 import lib.events.Event;
@@ -29,7 +30,7 @@ public class PaperBase implements ActionListener, CaretListener, EventHandler, L
 	
 	private final DefaultTableModel paperTableModel;
 	
-	private final HashSet<Paper> paperCollection = new HashSet<Paper>();
+	private final HashSet<Paper> paperCollection;
 	private final DefaultListSelectionModel paperTableSelectionModel;
 	
 	private Paper[] currentDisplayedPapers = new Paper[0];
@@ -54,6 +55,10 @@ public class PaperBase implements ActionListener, CaretListener, EventHandler, L
 		window.addRelevantPaperButton.addActionListener(this);
 		
 		eventDispatcher.addEventListener(this, EventType.IMPORT_PAPER);
+		
+		paperCollection = PaperBaseCache.load();
+		
+		updatePaperList();
 	}
 
 	@Override
@@ -72,6 +77,7 @@ public class PaperBase implements ActionListener, CaretListener, EventHandler, L
 			if(!paperCollection.contains(paper)) {
 				paperCollection.add(paper);
 				updatePaperList();
+				PaperBaseCache.store(paperCollection);
 			}
 		}
 	}

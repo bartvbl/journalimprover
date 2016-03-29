@@ -14,6 +14,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.HashMap;
 
+import lib.util.IOUtils;
 import nu.xom.Attribute;
 import nu.xom.Builder;
 import nu.xom.Document;
@@ -39,7 +40,7 @@ public class HTMLDumper {
 	}
 
 	private static void convert(File inputFile, Builder builder) throws ValidityException, ParsingException, IOException {
-		String fileContents = readFileContents(inputFile);
+		String fileContents = IOUtils.readFileContents(inputFile);
 		fileContents = preprocess(fileContents);
 		InputStream stream = new ByteArrayInputStream(fileContents.getBytes(StandardCharsets.UTF_8));
 		Document document = builder.build(stream);
@@ -161,13 +162,5 @@ public class HTMLDumper {
 		return fileContents;
 	}
 
-	private static String readFileContents(File inputFile) throws IOException {
-		BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(inputFile), "UTF8"));
-		StringBuffer fileContents = new StringBuffer();
-		while(bufferedReader.ready()) {
-			fileContents.append(bufferedReader.readLine()).append("\n");
-		}
-		bufferedReader.close();
-		return fileContents.toString();
-	}
+	
 }
