@@ -122,7 +122,7 @@ public class PaperTrackerWindow extends javax.swing.JFrame {
 
         removeRelevantPaperButton.setText("Remove selected");
 
-        jTable1.setModel(new DefaultTableModel(
+        relevantPaperTable.setModel(new DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -133,7 +133,7 @@ public class PaperTrackerWindow extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(relevantPaperTable);
 
         GroupLayout jPanel2Layout = new GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -490,7 +490,7 @@ public class PaperTrackerWindow extends javax.swing.JFrame {
     public final JSplitPane jSplitPane1 = new JSplitPane();
     public final JSplitPane jSplitPane2 = new JSplitPane();
     public final JSplitPane jSplitPane3 = new JSplitPane();
-    public final JTable jTable1 = new JTable();
+    public final JTable relevantPaperTable = new JTable();
     public final JTextArea paperAbstractField = new JTextArea();
     public final JLabel paperAuthorLabel = new JLabel();
     public final JTextArea paperCommentsField = new JTextArea();

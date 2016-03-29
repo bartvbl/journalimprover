@@ -2,6 +2,7 @@ package core;
 
 import gui.PaperTrackerWindow;
 import gui.SwingUtils;
+import interactivity.IdeaTracker;
 import interactivity.PaperBase;
 import interactivity.PaperDisplayer;
 import interactivity.PaperImportHandler;
@@ -17,6 +18,7 @@ public class PaperTrackerMain {
 		new PaperBase(window, mainDispatcher);
 		new PaperImportHandler(window, mainDispatcher);
 		new PaperDisplayer(window, mainDispatcher);
+		new IdeaTracker(window, mainDispatcher);
 		
 		window.setTitle("Paper Tracker");
 		window.setVisible(true);
