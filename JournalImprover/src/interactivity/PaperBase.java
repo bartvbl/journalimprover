@@ -66,6 +66,12 @@ public class PaperBase implements ActionListener, CaretListener, EventHandler, L
 
 	@Override
 	public void actionPerformed(ActionEvent event) {
+		int index = paperTableSelectionModel.getLeadSelectionIndex();
+		if(index < 0 || index >= currentDisplayedPapers.length) {
+			return;
+		}
+		Paper selectedPaper = currentDisplayedPapers[index];
+		eventDispatcher.dispatchEvent(new Event<Paper>(EventType.ADD_RELEVANT_PAPER, selectedPaper));
 	}
 
 	@Override
