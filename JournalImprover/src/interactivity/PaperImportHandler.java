@@ -1,4 +1,4 @@
-package core;
+package interactivity;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -6,8 +6,11 @@ import java.io.File;
 
 import javax.swing.JFileChooser;
 
+import data.Paper;
 import gui.PaperTrackerWindow;
+import lib.events.Event;
 import lib.events.EventDispatcher;
+import lib.events.EventType;
 
 public class PaperImportHandler implements ActionListener {
 
@@ -31,6 +34,9 @@ public class PaperImportHandler implements ActionListener {
 		if(result == JFileChooser.APPROVE_OPTION) {
 			File chosenFile = fileChooser.getSelectedFile();
 			Paper[] loadedPapers = PaperLoader.loadPapers(chosenFile, window);
+			for(Paper paper : loadedPapers) {
+				eventDispatcher.dispatchEvent(new Event<Paper>(EventType.IMPORT_PAPER, paper));
+			}
 		}
 	}
 

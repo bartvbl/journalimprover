@@ -1,4 +1,4 @@
-package core;
+package interactivity;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -14,6 +14,7 @@ import java.util.HashMap;
 
 import javax.swing.JOptionPane;
 
+import data.Paper;
 import gui.PaperTrackerWindow;
 import nu.xom.Attribute;
 import nu.xom.Builder;

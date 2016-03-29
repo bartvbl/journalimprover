@@ -2,6 +2,8 @@ package core;
 
 import gui.PaperTrackerWindow;
 import gui.SwingUtils;
+import interactivity.PaperBase;
+import interactivity.PaperImportHandler;
 import lib.events.EventDispatcher;
 
 public class PaperTrackerMain {
