@@ -29,6 +29,9 @@ public class PaperDisplayer implements EventHandler {
 		window.paperTitleLabel.setText("<html>" + currentSelectedPaper.title.replaceAll("\n", "<br>"));
 		window.paperDateLabel.setText("<html>" + currentSelectedPaper.publicationDate.replaceAll("\n", "<br>"));
 		window.paperAuthorLabel.setText("<html>" + currentSelectedPaper.authors.replaceAll("\n", "<br>"));
+		
+		// ensure scroll area is at the top of the abstract
+		window.paperAbstractField.setCaretPosition(0);
 	}
 
 	@Override
