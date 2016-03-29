@@ -323,13 +323,13 @@ public class PaperTrackerWindow extends javax.swing.JFrame {
 
         jMenu1.setText("File");
 
-        jMenuItem1.setText("Import Web of Science HTML document..");
-        jMenuItem1.addActionListener(new ActionListener() {
+        importPaperHTMLItem.setText("Import Web of Science HTML document..");
+        importPaperHTMLItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
+                importPaperHTMLItemActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuItem1);
+        jMenu1.add(importPaperHTMLItem);
 
         jMenuBar1.add(jMenu1);
 
@@ -354,18 +354,53 @@ public class PaperTrackerWindow extends javax.swing.JFrame {
         // TODO add your handling code here:
     }                                                 
 
-    private void jMenuItem1ActionPerformed(ActionEvent evt) {                                           
+    private void importPaperHTMLItemActionPerformed(ActionEvent evt) {                                                    
         // TODO add your handling code here:
-    }                                          
+    }                                                   
 
-   
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(PaperTrackerWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(PaperTrackerWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(PaperTrackerWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(PaperTrackerWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new PaperTrackerWindow().setVisible(true);
+            }
+        });
+    }
+
     // Variables declaration - do not modify                     
     public final JButton addIdeaButton = new JButton();
     public final JButton addRelevantPaperButton = new JButton();
     public final JButton deleteIdeaButton = new JButton();
     public final JPanel dropPDFArea = new JPanel();
-    public static final JList<String> ideaList = new JList<>();
+    public final JList<String> ideaList = new JList<>();
     public final JTextField ideaNameField = new JTextField();
+    public final JMenuItem importPaperHTMLItem = new JMenuItem();
     public final JLabel jLabel1 = new JLabel();
     public final JLabel jLabel11 = new JLabel();
     public final JLabel jLabel12 = new JLabel();
@@ -379,7 +414,6 @@ public class PaperTrackerWindow extends javax.swing.JFrame {
     public final JMenu jMenu1 = new JMenu();
     public final JMenu jMenu2 = new JMenu();
     public final JMenuBar jMenuBar1 = new JMenuBar();
-    public final JMenuItem jMenuItem1 = new JMenuItem();
     public final JPanel jPanel1 = new JPanel();
     public final JPanel jPanel2 = new JPanel();
     public final JPanel jPanel3 = new JPanel();
@@ -392,7 +426,7 @@ public class PaperTrackerWindow extends javax.swing.JFrame {
     public final JSplitPane jSplitPane1 = new JSplitPane();
     public final JSplitPane jSplitPane2 = new JSplitPane();
     public final JSplitPane jSplitPane3 = new JSplitPane();
-    public static final JList<String> knownPapersList = new JList<>();
+    public final JList<String> knownPapersList = new JList<>();
     public final JTextArea paperAbstractField = new JTextArea();
     public final JLabel paperAuthorLabel = new JLabel();
     public final JTextArea paperCommentsField = new JTextArea();
@@ -400,7 +434,7 @@ public class PaperTrackerWindow extends javax.swing.JFrame {
     public final JCheckBox paperReadCheckbox = new JCheckBox();
     public final JButton paperShowPDFButton = new JButton();
     public final JLabel paperTitleLabel = new JLabel();
-    public static final JList<String> relevantPapersList = new JList<>();
+    public final JList<String> relevantPapersList = new JList<>();
     public final JTextField relevantPapersSearchField = new JTextField();
     public final JButton removeRelevantPaperButton = new JButton();
     public final JTextField searchPapersField = new JTextField();

@@ -12,6 +12,7 @@ public class PaperTrackerMain {
 		EventDispatcher mainDispatcher = new EventDispatcher();
 		
 		new PaperBase(window, mainDispatcher);
+		new PaperImportHandler(window, mainDispatcher);
 		
 		window.setTitle("Paper Tracker");
 		window.setVisible(true);
