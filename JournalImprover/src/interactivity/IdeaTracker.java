@@ -43,7 +43,7 @@ public class IdeaTracker implements EventHandler {
 		window.ideaList.setModel(this.ideaListModel);
 		window.ideaList.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		window.ideaList.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-			public void valueChanged(ListSelectionEvent arg0) {
+			public void valueChanged(ListSelectionEvent event) {
 				int selectedIndex = window.ideaList.getSelectionModel().getLeadSelectionIndex();
 				if(selectedIndex < 0 || selectedIndex >= ideaList.size()) {
 					window.addRelevantPaperButton.setEnabled(false);
@@ -100,7 +100,7 @@ public class IdeaTracker implements EventHandler {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
 				int selectedIndex = window.relevantPaperTable.getSelectionModel().getLeadSelectionIndex();
-				if(selectedIndex < 0 || selectedIndex >= ideaList.size()) {
+				if(selectedIndex < 0 || selectedIndex >= currentSelectedIdea.relevantPapers.size()) {
 					return;
 				}
 				Paper selectedRelevantPaper = currentSelectedIdea.relevantPapers.get(selectedIndex);
@@ -126,17 +126,21 @@ public class IdeaTracker implements EventHandler {
 	private void refreshIdeas() {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
+				Idea currentIdea = currentSelectedIdea;
+				int currentIdeaIndex = selectedIdeaIndex;
 				ideaListModel.clear();
 				for(Idea idea : ideaList) {
 					ideaListModel.addElement(idea.name);
 				}
 				relevantTableModel.setRowCount(0);
-				if(currentSelectedIdea != null) {
-					for(Paper paper : currentSelectedIdea.relevantPapers) {
+				if(currentIdea != null) {
+					for(Paper paper : currentIdea.relevantPapers) {
 						relevantTableModel.addRow(new String[]{paper.publicationDate, paper.title});
 					}
-					window.ideaList.getSelectionModel().setLeadSelectionIndex(selectedIdeaIndex);
+					window.ideaList.getSelectionModel().setLeadSelectionIndex(currentIdeaIndex);
 				}
+				currentSelectedIdea = currentIdea;
+				currentIdeaIndex = selectedIdeaIndex;
 			}
 		});
 	}
@@ -144,11 +148,9 @@ public class IdeaTracker implements EventHandler {
 	@Override
 	public void handleEvent(Event<?> event) {
 		if(event.eventType == EventType.ADD_RELEVANT_PAPER) {
-			if(currentSelectedIdea != null) {
-				Paper paper = (Paper) event.getEventParameterObject();
-				currentSelectedIdea.relevantPapers.add(paper);
-				refreshIdeas();
-			}
+			Paper paper = (Paper) event.getEventParameterObject();
+			currentSelectedIdea.relevantPapers.add(paper);
+			refreshIdeas();
 		}
 	}
 }
