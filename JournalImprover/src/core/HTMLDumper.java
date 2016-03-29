@@ -22,7 +22,7 @@ import nu.xom.Elements;
 import nu.xom.ParsingException;
 import nu.xom.ValidityException;
 
-public class Main {
+public class HTMLDumper {
 	public static void main(String[] args) {
 		Builder builder = new Builder();
 		File[] inputFiles = new File("input/").listFiles();
