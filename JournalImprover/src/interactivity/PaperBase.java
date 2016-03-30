@@ -91,7 +91,11 @@ public class PaperBase implements ActionListener, CaretListener, EventHandler, L
 				}
 				progressWindow.incrementProgress(1);
 			}
-			PaperBaseCache.store(paperCollection);
+			WorkerThread.enqueue(new Runnable() {
+				public void run() {
+					PaperBaseCache.store(paperCollection);
+				}
+			});
 			progressWindow.destroy();
 		}
 	}

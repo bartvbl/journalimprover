@@ -22,6 +22,7 @@ import lib.events.Event;
 import lib.events.EventDispatcher;
 import lib.events.EventHandler;
 import lib.events.EventType;
+import lib.util.WorkerThread;
 
 public class IdeaTracker implements EventHandler {
 
@@ -29,7 +30,7 @@ public class IdeaTracker implements EventHandler {
 	private final EventDispatcher eventDispatcher;
 	
 	private final DefaultListModel<String> ideaListModel;
-	private final ArrayList<Idea> ideaList = new ArrayList<Idea>();
+	private final ArrayList<Idea> ideaList;
 	
 	private final DefaultTableModel relevantTableModel;
 	
@@ -39,6 +40,8 @@ public class IdeaTracker implements EventHandler {
 	public IdeaTracker(PaperTrackerWindow window, EventDispatcher mainDispatcher) {
 		this.window = window;
 		this.eventDispatcher = mainDispatcher;
+		
+		this.ideaList = IdeaCache.load();
 		
 		this.ideaListModel = new DefaultListModel<String>();
 		window.ideaList.setModel(this.ideaListModel);
@@ -122,6 +125,7 @@ public class IdeaTracker implements EventHandler {
 		}
 		this.ideaList.add(new Idea(window.ideaNameField.getText()));
 		window.ideaNameField.setText("");
+		writeCache();
 		refreshIdeas();
 	}
 	
@@ -153,9 +157,18 @@ public class IdeaTracker implements EventHandler {
 			Paper paper = (Paper) event.getEventParameterObject();
 			if(!currentSelectedIdea.relevantPapers.contains(paper)) {
 				currentSelectedIdea.relevantPapers.add(paper);
-				IdeaCache.store(ideaList);
+				writeCache();
 				refreshIdeas();
 			}
 		}
+	}
+
+	private void writeCache() {
+		WorkerThread.enqueue(new Runnable() {
+			@Override
+			public void run() {
+				IdeaCache.store(ideaList);
+			}
+		});
 	}
 }
