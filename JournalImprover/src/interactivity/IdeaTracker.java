@@ -34,9 +34,6 @@ public class IdeaTracker implements EventHandler {
 	
 	private final DefaultTableModel relevantTableModel;
 	
-	private Idea currentSelectedIdea = null;
-	private int selectedIdeaIndex = -1;
-
 	public IdeaTracker(PaperTrackerWindow window, EventDispatcher mainDispatcher) {
 		this.window = window;
 		this.eventDispatcher = mainDispatcher;
@@ -50,16 +47,10 @@ public class IdeaTracker implements EventHandler {
 			public void valueChanged(ListSelectionEvent event) {
 				int selectedIndex = window.ideaList.getSelectionModel().getLeadSelectionIndex();
 				if(selectedIndex < 0 || selectedIndex >= ideaList.size()) {
-					window.addRelevantPaperButton.setEnabled(false);
-					window.deleteIdeaButton.setEnabled(false);
-					selectedIdeaIndex = -1;
-					currentSelectedIdea = null;
 					return;
 				}
-				selectedIdeaIndex = selectedIndex;
-				window.addRelevantPaperButton.setEnabled(true);
-				window.deleteIdeaButton.setEnabled(true);
-				currentSelectedIdea = ideaList.get(selectedIndex);				
+				updateIdeaButtons();
+				refreshRelevantPaperList();
 			}
 		});
 		
@@ -79,9 +70,9 @@ public class IdeaTracker implements EventHandler {
 				int answer = JOptionPane.showConfirmDialog(window, "Delete this idea?", "Delete", JOptionPane.YES_NO_OPTION);
 				if(answer == JOptionPane.OK_OPTION) {
 					ideaList.remove(selectedIndex);
-					currentSelectedIdea = null;
-					selectedIdeaIndex = -1;
-					refreshIdeas();				
+					updateIdeaButtons();
+					refreshIdeaList();
+					refreshRelevantPaperList();
 				}				
 			}
 		});
@@ -105,10 +96,14 @@ public class IdeaTracker implements EventHandler {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
 				int selectedIndex = window.relevantPaperTable.getSelectionModel().getLeadSelectionIndex();
-				if(selectedIndex < 0 || selectedIndex >= currentSelectedIdea.relevantPapers.size()) {
+				Idea selectedIdea = getSelectedIdea();
+				if(selectedIdea == null) {
 					return;
 				}
-				Paper selectedRelevantPaper = currentSelectedIdea.relevantPapers.get(selectedIndex);
+				if(selectedIndex < 0 || selectedIndex >= selectedIdea.relevantPapers.size()) {
+					return;
+				}
+				Paper selectedRelevantPaper = selectedIdea.relevantPapers.get(selectedIndex);
 				eventDispatcher.dispatchEvent(new Event<Paper>(EventType.PAPER_SELECTED, selectedRelevantPaper));
 			}
 		});
@@ -116,7 +111,8 @@ public class IdeaTracker implements EventHandler {
 		eventDispatcher.addEventListener(this, EventType.ADD_RELEVANT_PAPER);
 		window.addRelevantPaperButton.setEnabled(false);
 		
-		refreshIdeas();
+		refreshIdeaList();
+		refreshRelevantPaperList();
 	}
 
 	private void addNewIdea() {
@@ -126,27 +122,43 @@ public class IdeaTracker implements EventHandler {
 		this.ideaList.add(new Idea(window.ideaNameField.getText()));
 		window.ideaNameField.setText("");
 		writeCache();
-		refreshIdeas();
+		refreshIdeaList();
 	}
 	
-	private void refreshIdeas() {
+	private void updateIdeaButtons() {
+		Idea currentIdea = getSelectedIdea();
+		boolean isIdeaSelected = currentIdea != null;
+		
+		window.addRelevantPaperButton.setEnabled(isIdeaSelected);
+		window.deleteIdeaButton.setEnabled(isIdeaSelected);
+	}
+	
+	private void refreshIdeaList() {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				Idea currentIdea = currentSelectedIdea;
-				int currentIdeaIndex = selectedIdeaIndex;
+				int currentIdeaIndex = getSelectedIdeaIndex();
+				
 				ideaListModel.clear();
 				for(Idea idea : ideaList) {
 					ideaListModel.addElement(idea.name);
 				}
+				
+				window.ideaList.getSelectionModel().setLeadSelectionIndex(currentIdeaIndex);
+			}
+		});
+	}
+	
+	private void refreshRelevantPaperList() {
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				Idea currentIdea = getSelectedIdea();
+				
 				relevantTableModel.setRowCount(0);
 				if(currentIdea != null) {
 					for(Paper paper : currentIdea.relevantPapers) {
 						relevantTableModel.addRow(new String[]{paper.publicationDate, paper.title});
 					}
-					window.ideaList.getSelectionModel().setLeadSelectionIndex(currentIdeaIndex);
 				}
-				currentSelectedIdea = currentIdea;
-				currentIdeaIndex = selectedIdeaIndex;
 			}
 		});
 	}
@@ -155,12 +167,25 @@ public class IdeaTracker implements EventHandler {
 	public void handleEvent(Event<?> event) {
 		if(event.eventType == EventType.ADD_RELEVANT_PAPER) {
 			Paper paper = (Paper) event.getEventParameterObject();
-			if(!currentSelectedIdea.relevantPapers.contains(paper)) {
-				currentSelectedIdea.relevantPapers.add(paper);
+			Idea selectedIdea = getSelectedIdea();
+			if(!selectedIdea.relevantPapers.contains(paper)) {
+				selectedIdea.relevantPapers.add(paper);
 				writeCache();
-				refreshIdeas();
+				refreshRelevantPaperList();
 			}
 		}
+	}
+	
+	private int getSelectedIdeaIndex() {
+		return window.ideaList.getSelectionModel().getLeadSelectionIndex();
+	}
+	
+	private Idea getSelectedIdea() {
+		int selectedIndex = getSelectedIdeaIndex();
+		if(selectedIndex < 0 || selectedIndex >= ideaList.size()) {
+			return null;
+		}
+		return ideaList.get(selectedIndex);
 	}
 
 	private void writeCache() {

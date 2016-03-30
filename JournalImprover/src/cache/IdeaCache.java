@@ -31,8 +31,6 @@ public class IdeaCache {
 		IOUtils.writeXMLDocument(rootElement, cacheFile);
 	}
 
-	
-
 	public static ArrayList<Idea> load() {
 		
 		if(!cacheFile.exists()) {
