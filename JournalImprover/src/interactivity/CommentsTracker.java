@@ -10,6 +10,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 
+import cache.CommentCache;
 import data.Comment;
 import data.Paper;
 import data.Rating;
@@ -18,6 +19,7 @@ import lib.events.Event;
 import lib.events.EventDispatcher;
 import lib.events.EventHandler;
 import lib.events.EventType;
+import lib.util.WorkerThread;
 
 public class CommentsTracker implements EventHandler {
 
@@ -25,7 +27,7 @@ public class CommentsTracker implements EventHandler {
 	private final PaperTrackerWindow window;
 	private final EventDispatcher eventDispatcher;
 	
-	private final HashMap<String, Comment> commentMap = new HashMap<String, Comment>();
+	private final HashMap<String, Comment> commentMap = CommentCache.load();
 	private final DefaultComboBoxModel<String> ratingBoxModel;
 	
 	private Paper currentSelectedPaper = null;
@@ -77,6 +79,13 @@ public class CommentsTracker implements EventHandler {
 			comment.comments = window.paperCommentsField.getText();
 			comment.rating = Rating.fromIndex(window.ratingComboBox.getSelectedIndex());
 			comment.isRead = window.paperReadCheckbox.isSelected();
+			
+			WorkerThread.enqueue(new Runnable() {
+				@Override
+				public void run() {
+					CommentCache.write(commentMap);
+				}
+			});
 		}		
 	}
 
