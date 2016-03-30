@@ -14,6 +14,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
+import cache.IdeaCache;
 import data.Idea;
 import data.Paper;
 import gui.PaperTrackerWindow;
@@ -150,8 +151,11 @@ public class IdeaTracker implements EventHandler {
 	public void handleEvent(Event<?> event) {
 		if(event.eventType == EventType.ADD_RELEVANT_PAPER) {
 			Paper paper = (Paper) event.getEventParameterObject();
-			currentSelectedIdea.relevantPapers.add(paper);
-			refreshIdeas();
+			if(!currentSelectedIdea.relevantPapers.contains(paper)) {
+				currentSelectedIdea.relevantPapers.add(paper);
+				IdeaCache.store(ideaList);
+				refreshIdeas();
+			}
 		}
 	}
 }

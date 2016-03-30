@@ -1,13 +1,34 @@
 package lib.util;
 
 public class WorkerThread extends Thread {
-	private final Runnable runnable;
+	private final Queue<Runnable> workQueue = new Queue<Runnable>();
 	
-	public WorkerThread(Runnable runnable) {
-		this.runnable = runnable;
+	private static final WorkerThread thread = new WorkerThread();
+	static {
+		thread.start();
 	}
 	
 	public void run() {
-		runnable.run();
+		while(true) {
+			if(!workQueue.isEmpty()) {
+				Runnable task;
+				synchronized(workQueue) {
+					task = workQueue.dequeue();
+				}
+				task.run();
+			} else {
+				try {
+					Thread.sleep(15);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
+	public static void enqueue(Runnable runnable) {
+		synchronized(thread.workQueue) {
+			thread.workQueue.enqueue(runnable);
+		}
 	}
 }

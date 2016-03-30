@@ -97,7 +97,7 @@ public class PaperBase implements ActionListener, CaretListener, EventHandler, L
 	}
 
 	private void updatePaperList() {
-		new WorkerThread(new Runnable() {
+		WorkerThread.enqueue(new Runnable() {
 			public void run() {
 				String searchQuery = window.searchPapersField.getText();
 				Paper[] relevantPapers = filter(searchQuery);
@@ -112,7 +112,7 @@ public class PaperBase implements ActionListener, CaretListener, EventHandler, L
 					}
 				});
 			}
-		}).start();
+		});
 	}
 
 	private Paper[] filter(String searchQuery) {
