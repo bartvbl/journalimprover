@@ -73,6 +73,7 @@ public class IdeaTracker implements EventHandler {
 					updateIdeaButtons();
 					refreshIdeaList();
 					refreshRelevantPaperList();
+					writeCache();
 				}				
 			}
 		});
@@ -97,14 +98,38 @@ public class IdeaTracker implements EventHandler {
 			public void valueChanged(ListSelectionEvent e) {
 				int selectedIndex = window.relevantPaperTable.getSelectionModel().getLeadSelectionIndex();
 				Idea selectedIdea = getSelectedIdea();
+				
+				if(selectedIdea == null) {
+					window.removeRelevantPaperButton.setEnabled(false);
+					return;
+				}
+				if(selectedIndex < 0 || selectedIndex >= selectedIdea.relevantPapers.size()) {
+					window.removeRelevantPaperButton.setEnabled(false);
+					return;
+				}
+				
+				window.removeRelevantPaperButton.setEnabled(true);
+				Paper selectedRelevantPaper = selectedIdea.relevantPapers.get(selectedIndex);
+				eventDispatcher.dispatchEvent(new Event<Paper>(EventType.PAPER_SELECTED, selectedRelevantPaper));
+			}
+		});
+		
+		window.removeRelevantPaperButton.setEnabled(false);
+		window.removeRelevantPaperButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				int selectedIndex = window.relevantPaperTable.getSelectionModel().getLeadSelectionIndex();
+				Idea selectedIdea = getSelectedIdea();
+				
 				if(selectedIdea == null) {
 					return;
 				}
 				if(selectedIndex < 0 || selectedIndex >= selectedIdea.relevantPapers.size()) {
 					return;
 				}
-				Paper selectedRelevantPaper = selectedIdea.relevantPapers.get(selectedIndex);
-				eventDispatcher.dispatchEvent(new Event<Paper>(EventType.PAPER_SELECTED, selectedRelevantPaper));
+				selectedIdea.relevantPapers.remove(selectedIndex);
+				refreshRelevantPaperList();
+				writeCache();
 			}
 		});
 		
