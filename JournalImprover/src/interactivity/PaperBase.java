@@ -134,7 +134,7 @@ public class PaperBase implements ActionListener, CaretListener, EventHandler, L
 			}
 			return relevantPapers.toArray(new Paper[relevantPapers.size()]);
 		} else {
-			return paperCollection.entrySet().toArray(new Paper[paperCollection.size()]);
+			return paperCollection.values().toArray(new Paper[paperCollection.size()]);
 		}
 		
 	}

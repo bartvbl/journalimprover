@@ -259,7 +259,7 @@ public class PaperTrackerWindow extends javax.swing.JFrame {
 
         paperReadCheckbox.setText("Read");
 
-        jComboBox2.setModel(new DefaultComboBoxModel<>(new String[] { "(unspecified)", "Garbage", "Bad", "Mediocre", "Good", "Very relevant" }));
+        ratingComboBox.setModel(new DefaultComboBoxModel<>(new String[] { "(unspecified)", "Garbage", "Bad", "Mediocre", "Good", "Very relevant" }));
 
         jLabel9.setText("Rating:");
 
@@ -315,7 +315,7 @@ public class PaperTrackerWindow extends javax.swing.JFrame {
                                     .addGroup(jPanel4Layout.createSequentialGroup()
                                         .addComponent(jLabel9)
                                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jComboBox2, GroupLayout.PREFERRED_SIZE, 110, GroupLayout.PREFERRED_SIZE)))
+                                        .addComponent(ratingComboBox, GroupLayout.PREFERRED_SIZE, 110, GroupLayout.PREFERRED_SIZE)))
                                 .addGap(0, 11, Short.MAX_VALUE))
                             .addComponent(jScrollPane5))
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
@@ -366,7 +366,7 @@ public class PaperTrackerWindow extends javax.swing.JFrame {
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel9)
-                    .addComponent(jComboBox2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                    .addComponent(ratingComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                     .addComponent(paperReadCheckbox))
                 .addContainerGap())
         );
@@ -459,7 +459,6 @@ public class PaperTrackerWindow extends javax.swing.JFrame {
     public final JTextField ideaNameField = new JTextField();
     public final JMenuItem importPaperHTMLItem = new JMenuItem();
     public final JComboBox<String> jComboBox1 = new JComboBox<>();
-    public final JComboBox<String> jComboBox2 = new JComboBox<>();
     public final JLabel jLabel1 = new JLabel();
     public final JLabel jLabel10 = new JLabel();
     public final JLabel jLabel11 = new JLabel();
@@ -490,7 +489,6 @@ public class PaperTrackerWindow extends javax.swing.JFrame {
     public final JSplitPane jSplitPane1 = new JSplitPane();
     public final JSplitPane jSplitPane2 = new JSplitPane();
     public final JSplitPane jSplitPane3 = new JSplitPane();
-    public final JTable relevantPaperTable = new JTable();
     public final JTextArea paperAbstractField = new JTextArea();
     public final JLabel paperAuthorLabel = new JLabel();
     public final JTextArea paperCommentsField = new JTextArea();
@@ -499,6 +497,8 @@ public class PaperTrackerWindow extends javax.swing.JFrame {
     public final JButton paperShowPDFButton = new JButton();
     public final JTable paperTable = new JTable();
     public final JLabel paperTitleLabel = new JLabel();
+    public final JComboBox<String> ratingComboBox = new JComboBox<>();
+    public final JTable relevantPaperTable = new JTable();
     public final JTextField relevantPapersSearchField = new JTextField();
     public final JButton removeRelevantPaperButton = new JButton();
     public final JTextField searchPapersField = new JTextField();
