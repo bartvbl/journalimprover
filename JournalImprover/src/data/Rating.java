@@ -1,12 +1,14 @@
 package data;
 
 public enum Rating {
-	None		(0, "(none specified)"), 
-	Garbage		(1, "Garbage"), 
-	Bad			(2, "Bad"),
-	Mediocre	(3, "Mediocre"), 
-	Good		(4, "Good"), 
-	Fantastic	(5, "Very relevant");
+	None				(0, "(none specified)"), 
+	Garbage				(1, "Garbage"), 
+	Bad					(2, "Bad"),
+	Mediocre			(3, "Mediocre"), 
+	Good				(4, "Good"), 
+	Very_Relevant		(5, "Very relevant"),
+	Very_Interesting	(6, "Very interesting")
+	;
 	
 	public final int index;
 	public final String displayName;

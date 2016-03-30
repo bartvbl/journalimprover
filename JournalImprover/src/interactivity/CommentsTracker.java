@@ -81,6 +81,9 @@ public class CommentsTracker implements EventHandler {
 		if(isSwitchingPaper) {
 			return;
 		}
+		if(currentSelectedPaper == null) {
+			return;
+		}
 		Comment comment = commentMap.get(this.currentSelectedPaper.title);
 		if(comment != null) {
 			comment.comments = window.paperCommentsField.getText();
