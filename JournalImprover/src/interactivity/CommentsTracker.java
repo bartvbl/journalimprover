@@ -68,6 +68,13 @@ public class CommentsTracker implements EventHandler {
 				updateCurrentComment();
 			}
 		});
+		
+		window.seenCheckBox.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				updateCurrentComment();
+			}
+		});
 	}
 	
 	protected void updateCurrentComment() {
@@ -79,6 +86,7 @@ public class CommentsTracker implements EventHandler {
 			comment.comments = window.paperCommentsField.getText();
 			comment.rating = Rating.fromIndex(window.ratingComboBox.getSelectedIndex());
 			comment.isRead = window.paperReadCheckbox.isSelected();
+			comment.isSeen = window.seenCheckBox.isSelected();
 			
 			WorkerThread.enqueue(new Runnable() {
 				@Override
@@ -101,10 +109,12 @@ public class CommentsTracker implements EventHandler {
 				window.paperCommentsField.setText(comment.comments);
 				window.ratingComboBox.setSelectedIndex(comment.rating.index);
 				window.paperReadCheckbox.setSelected(comment.isRead);
+				window.seenCheckBox.setSelected(comment.isSeen);
 			} else {
 				window.paperCommentsField.setText("");
 				window.ratingComboBox.setSelectedIndex(0);
 				window.paperReadCheckbox.setSelected(false);
+				window.seenCheckBox.setSelected(false);
 				
 				Comment newComment = new Comment();
 				commentMap.put(selectedPaper.title, newComment);

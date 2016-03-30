@@ -1,6 +1,4 @@
 package gui;
-
-
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -288,6 +286,13 @@ public class PaperTrackerWindow extends javax.swing.JFrame {
 
         jLabel14.setText("Yes/No");
 
+        seenCheckBox.setText("Seen");
+        seenCheckBox.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                seenCheckBoxActionPerformed(evt);
+            }
+        });
+
         GroupLayout jPanel4Layout = new GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(jPanel4Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
@@ -319,15 +324,19 @@ public class PaperTrackerWindow extends javax.swing.JFrame {
                                 .addGap(0, 11, Short.MAX_VALUE))
                             .addComponent(jScrollPane5))
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel4Layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-                            .addComponent(paperShowPDFButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel4Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel4Layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
+                                .addComponent(paperShowPDFButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(jPanel4Layout.createSequentialGroup()
+                                    .addGap(10, 10, 10)
+                                    .addComponent(jLabel12)
+                                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(jLabel14))
+                                .addComponent(jPanel5, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addGap(10, 10, 10)
-                                .addComponent(jLabel12)
-                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel14))
-                            .addComponent(jPanel5, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(paperReadCheckbox))))
+                                .addComponent(paperReadCheckbox)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(seenCheckBox)))))
                 .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(jPanel4Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
@@ -367,7 +376,8 @@ public class PaperTrackerWindow extends javax.swing.JFrame {
                 .addGroup(jPanel4Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel9)
                     .addComponent(ratingComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                    .addComponent(paperReadCheckbox))
+                    .addComponent(paperReadCheckbox)
+                    .addComponent(seenCheckBox))
                 .addContainerGap())
         );
 
@@ -415,6 +425,10 @@ public class PaperTrackerWindow extends javax.swing.JFrame {
     private void jComboBox1ActionPerformed(ActionEvent evt) {                                           
         // TODO add your handling code here:
     }                                          
+
+    private void seenCheckBoxActionPerformed(ActionEvent evt) {                                             
+        // TODO add your handling code here:
+    }                                            
 
     /**
      * @param args the command line arguments
@@ -502,5 +516,6 @@ public class PaperTrackerWindow extends javax.swing.JFrame {
     public final JTextField relevantPapersSearchField = new JTextField();
     public final JButton removeRelevantPaperButton = new JButton();
     public final JTextField searchPapersField = new JTextField();
+    public final JCheckBox seenCheckBox = new JCheckBox();
     // End of variables declaration                   
 }
