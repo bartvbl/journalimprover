@@ -1,4 +1,5 @@
 package gui;
+
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -395,6 +396,9 @@ public class PaperTrackerWindow extends javax.swing.JFrame {
         });
         jMenu1.add(importPaperHTMLItem);
 
+        searchOnlineMenuItem.setText("Search online resources..");
+        jMenu1.add(searchOnlineMenuItem);
+
         jMenuBar1.add(jMenu1);
 
         jMenu2.setText("Edit");
@@ -515,6 +519,7 @@ public class PaperTrackerWindow extends javax.swing.JFrame {
     public final JTable relevantPaperTable = new JTable();
     public final JTextField relevantPapersSearchField = new JTextField();
     public final JButton removeRelevantPaperButton = new JButton();
+    public final JMenuItem searchOnlineMenuItem = new JMenuItem();
     public final JTextField searchPapersField = new JTextField();
     public final JCheckBox seenCheckBox = new JCheckBox();
     // End of variables declaration                   
