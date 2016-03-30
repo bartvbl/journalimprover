@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 import data.Idea;
 import data.Paper;
+import interactivity.PaperBase;
 import lib.util.IOUtils;
 import nu.xom.Attribute;
 import nu.xom.Builder;
@@ -31,7 +32,7 @@ public class IdeaCache {
 		IOUtils.writeXMLDocument(rootElement, cacheFile);
 	}
 
-	public static ArrayList<Idea> load() {
+	public static ArrayList<Idea> load(PaperBase paperBase) {
 		
 		if(!cacheFile.exists()) {
 			return new ArrayList<Idea>();
@@ -47,7 +48,7 @@ public class IdeaCache {
 			Elements ideaElements = document.getRootElement().getChildElements();
 			
 			for(int i = 0; i < ideaElements.size(); i++) {
-				Idea idea = IdeaConverter.convertXMLToIdea(ideaElements.get(i));
+				Idea idea = IdeaConverter.convertXMLToIdea(ideaElements.get(i), paperBase);
 				ideas.add(idea);
 			}
 			

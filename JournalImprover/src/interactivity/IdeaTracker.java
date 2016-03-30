@@ -33,12 +33,14 @@ public class IdeaTracker implements EventHandler {
 	private final ArrayList<Idea> ideaList;
 	
 	private final DefaultTableModel relevantTableModel;
+	private final PaperBase paperBase;
 	
-	public IdeaTracker(PaperTrackerWindow window, EventDispatcher mainDispatcher) {
+	public IdeaTracker(PaperBase paperBase, PaperTrackerWindow window, EventDispatcher mainDispatcher) {
 		this.window = window;
+		this.paperBase = paperBase;
 		this.eventDispatcher = mainDispatcher;
 		
-		this.ideaList = IdeaCache.load();
+		this.ideaList = IdeaCache.load(paperBase);
 		
 		this.ideaListModel = new DefaultListModel<String>();
 		window.ideaList.setModel(this.ideaListModel);

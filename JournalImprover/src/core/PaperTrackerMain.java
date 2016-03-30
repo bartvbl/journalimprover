@@ -15,10 +15,10 @@ public class PaperTrackerMain {
 		PaperTrackerWindow window = new PaperTrackerWindow();
 		EventDispatcher mainDispatcher = new EventDispatcher();
 		
-		new PaperBase(window, mainDispatcher);
+		PaperBase paperBase = new PaperBase(window, mainDispatcher);
 		new PaperImportHandler(window, mainDispatcher);
 		new PaperDisplayer(window, mainDispatcher);
-		new IdeaTracker(window, mainDispatcher);
+		new IdeaTracker(paperBase, window, mainDispatcher);
 		
 		window.setTitle("Paper Tracker");
 		window.setVisible(true);

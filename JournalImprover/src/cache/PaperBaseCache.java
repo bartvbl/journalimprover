@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 
 import data.Paper;
@@ -18,9 +20,9 @@ import nu.xom.ParsingException;
 public class PaperBaseCache {
 	private static final File cacheFile = new File("cache/papers.xml");
 
-	public static void store(HashSet<Paper> paperCollection) {
+	public static void store(Collection<Paper> papers) {
 		Element rootElement = new Element("paperCache");
-		for(Paper paper : paperCollection) {
+		for(Paper paper : papers) {
 			Element paperElement = PaperConverter.convertPaperToXML(paper);
 			
 			rootElement.appendChild(paperElement);
@@ -31,9 +33,9 @@ public class PaperBaseCache {
 
 	
 
-	public static HashSet<Paper> load() {
+	public static HashMap<String, Paper> load() {
 		if(!cacheFile.exists()) {
-			return new HashSet<Paper>();
+			return new HashMap<String, Paper>();
 		}
 		
 		try {
@@ -45,14 +47,14 @@ public class PaperBaseCache {
 			Element rootElement = document.getRootElement();
 			Elements cachedPapers = rootElement.getChildElements();
 			
-			HashSet<Paper> paperCache = new HashSet<Paper>();
+			HashMap<String, Paper> paperCache = new HashMap<String, Paper>();
 			
 			for(int i = 0; i < cachedPapers.size(); i++) {
 				Element paperElement = cachedPapers.get(i);
 				
 				Paper paper = PaperConverter.convertXMLToPaper(paperElement);
 				
-				paperCache.add(paper);
+				paperCache.put(paper.title, paper);
 			}
 			
 			return paperCache;
@@ -62,4 +64,5 @@ public class PaperBaseCache {
 		}
 		
 	}
+
 }

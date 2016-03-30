@@ -3,6 +3,7 @@ package interactivity;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -33,7 +34,7 @@ public class PaperBase implements ActionListener, CaretListener, EventHandler, L
 	
 	private final DefaultTableModel paperTableModel;
 	
-	private final HashSet<Paper> paperCollection;
+	private final HashMap<String, Paper> paperCollection;
 	private final DefaultListSelectionModel paperTableSelectionModel;
 	
 	private Paper[] currentDisplayedPapers = new Paper[0];
@@ -85,15 +86,15 @@ public class PaperBase implements ActionListener, CaretListener, EventHandler, L
 			Paper[] loadedPapers = (Paper[]) event.getEventParameterObject();
 			ProgressWindow progressWindow = new ProgressWindow(window, loadedPapers.length, "Import progress");
 			for(Paper paper : loadedPapers) {
-				if(!paperCollection.contains(paper)) {
-					paperCollection.add(paper);
+				if(!paperCollection.containsKey(paper.title)) {
+					paperCollection.put(paper.title, paper);
 					updatePaperList();
 				}
 				progressWindow.incrementProgress(1);
 			}
 			WorkerThread.enqueue(new Runnable() {
 				public void run() {
-					PaperBaseCache.store(paperCollection);
+					PaperBaseCache.store(paperCollection.values());
 				}
 			});
 			progressWindow.destroy();
@@ -122,7 +123,7 @@ public class PaperBase implements ActionListener, CaretListener, EventHandler, L
 	private Paper[] filter(String searchQuery) {
 		if(!searchQuery.equals("")) {
 			ArrayList<Paper> relevantPapers = new ArrayList<Paper>();
-			for(Paper paper : paperCollection) {
+			for(Paper paper : paperCollection.values()) {
 				boolean containsTitle = paper.title == null ? false : paper.title.contains(searchQuery);
 				boolean containsAbstract = paper.abstractText == null ? false : paper.abstractText.contains(searchQuery);
 				boolean containsAuthors = paper.authors == null ? false : paper.authors.contains(searchQuery);
@@ -133,7 +134,7 @@ public class PaperBase implements ActionListener, CaretListener, EventHandler, L
 			}
 			return relevantPapers.toArray(new Paper[relevantPapers.size()]);
 		} else {
-			return paperCollection.toArray(new Paper[paperCollection.size()]);
+			return paperCollection.entrySet().toArray(new Paper[paperCollection.size()]);
 		}
 		
 	}
@@ -146,6 +147,10 @@ public class PaperBase implements ActionListener, CaretListener, EventHandler, L
 		}
 		Paper selectedPaper = currentDisplayedPapers[index];
 		eventDispatcher.dispatchEvent(new Event<Paper>(EventType.PAPER_SELECTED, selectedPaper));
+	}
+
+	public Paper getPaperByTitle(String paperTitle) {
+		return paperCollection.get(paperTitle);
 	}
 
 }
