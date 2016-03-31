@@ -7,7 +7,7 @@ public class Paper {
 	public final String title;
 	public final Date publicationDate;
 	public final Author[] authors;
-	public final String abstractText;
+	public String abstractText;
 	public final String subtitle;
 	public final String publisher;
 	public final String volume;

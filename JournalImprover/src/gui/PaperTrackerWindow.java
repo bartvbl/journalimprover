@@ -58,10 +58,10 @@ public class PaperTrackerWindow extends javax.swing.JFrame {
 
         addIdeaButton.setText("Add");
 
-        ideaList.setModel(new AbstractListModel<String>() {
+        ideaList.setModel(new AbstractListModel() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
+            public Object getElementAt(int i) { return strings[i]; }
         });
         jScrollPane2.setViewportView(ideaList);
 
@@ -236,7 +236,9 @@ public class PaperTrackerWindow extends javax.swing.JFrame {
         paperAbstractField.setColumns(20);
         paperAbstractField.setFont(new Font("Calibri", 0, 12)); // NOI18N
         paperAbstractField.setRows(5);
+        paperAbstractField.setTabSize(4);
         paperAbstractField.setText("Something very interesting.");
+        paperAbstractField.setWrapStyleWord(true);
         jScrollPane4.setViewportView(paperAbstractField);
 
         paperShowPDFButton.setText("Show PDF");
@@ -249,7 +251,7 @@ public class PaperTrackerWindow extends javax.swing.JFrame {
 
         paperReadCheckbox.setText("Read");
 
-        ratingComboBox.setModel(new DefaultComboBoxModel<>(new String[] { "(unspecified)", "Garbage", "Bad", "Mediocre", "Good", "Very relevant" }));
+        ratingComboBox.setModel(new DefaultComboBoxModel(new String[] { "(unspecified)", "Garbage", "Bad", "Mediocre", "Good", "Very relevant" }));
 
         jLabel9.setText("Rating:");
 
@@ -463,7 +465,7 @@ public class PaperTrackerWindow extends javax.swing.JFrame {
     public final JButton addIdeaButton = new JButton();
     public final JButton addRelevantPaperButton = new JButton();
     public final JButton deleteIdeaButton = new JButton();
-    public final JList<String> ideaList = new JList<>();
+    public final JList<String> ideaList = new JList<String>();
     public final JTextField ideaNameField = new JTextField();
     public final JMenuItem importPaperHTMLItem = new JMenuItem();
     public final JLabel jLabel1 = new JLabel();
@@ -504,7 +506,7 @@ public class PaperTrackerWindow extends javax.swing.JFrame {
     public final JButton paperShowPDFButton = new JButton();
     public final JTable paperTable = new JTable();
     public final JLabel paperTitleLabel = new JLabel();
-    public final JComboBox<String> ratingComboBox = new JComboBox<>();
+    public final JComboBox<String> ratingComboBox = new JComboBox<String>();
     public final JTable relevantPaperTable = new JTable();
     public final JTextField relevantPapersSearchField = new JTextField();
     public final JButton removeRelevantPaperButton = new JButton();
@@ -513,4 +515,5 @@ public class PaperTrackerWindow extends javax.swing.JFrame {
     public final JCheckBox seenCheckBox = new JCheckBox();
     // End of variables declaration                   
 }
+
 

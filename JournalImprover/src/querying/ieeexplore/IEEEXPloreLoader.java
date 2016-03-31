@@ -124,12 +124,10 @@ public class IEEEXPloreLoader {
 
 	private static Element requestDocument(String url, OnlineSearchHandler onlineSearchHandler) throws IOException, ParsingException, ValidityException {
 		String responseString = HTTPRequester.request(url);
-		onlineSearchHandler.printStatusMessage("IEEEXPlore: XML Response received.");
 		Builder builder = new Builder();
 		InputStream stream = new ByteArrayInputStream(responseString.getBytes(StandardCharsets.UTF_8));
 		Document document = builder.build(stream);
 		Element rootElement = document.getRootElement();
-		onlineSearchHandler.printStatusMessage("IEEEXPlore: XML Response parsed.");
 		return rootElement;
 	}
 
