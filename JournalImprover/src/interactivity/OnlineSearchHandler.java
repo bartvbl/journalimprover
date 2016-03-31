@@ -10,7 +10,9 @@ import lib.events.Event;
 import lib.events.EventDispatcher;
 import lib.events.EventType;
 import lib.util.WorkerThread;
+import nu.xom.ParsingException;
 import querying.crossref.CrossRefLoader;
+import querying.ieeexplore.IEEEXPloreLoader;
 import data.Paper;
 
 public class OnlineSearchHandler implements ActionListener {
@@ -21,6 +23,8 @@ public class OnlineSearchHandler implements ActionListener {
 	public OnlineSearchHandler(PaperImportWindow window, EventDispatcher eventDispatcher) {
 		this.window = window;
 		this.eventDispatcher = eventDispatcher;
+		window.progressBar.setMinimum(0);
+		window.progressBar.setMaximum(100);
 	}
 
 	@Override
@@ -40,10 +44,18 @@ public class OnlineSearchHandler implements ActionListener {
 		String query = window.searchPapersField.getText();
 		
 		try {
-			Paper[] crossRefPapers = CrossRefLoader.query(query, this);
+			printStatusMessage("CrossRef: Querying..");
+			Paper[] crossRefPapers = new Paper[0];//CrossRefLoader.query(query, this);
 			printStatusMessage("CrossRef returned " + crossRefPapers.length + " papers.");
 			eventDispatcher.dispatchEvent(new Event<Paper[]>(EventType.IMPORT_PAPERS, crossRefPapers));
-		} catch (IOException e1) {
+			printStatusMessage("CrossRef papers imported.");
+			
+			printStatusMessage("IEEEXPlore: Querying..");
+			Paper[] ieeexplorePapers = IEEEXPloreLoader.query(query, this);
+			printStatusMessage("IEEEXPlore: returned " + ieeexplorePapers.length + " papers.");
+			eventDispatcher.dispatchEvent(new Event<Paper[]>(EventType.IMPORT_PAPERS, crossRefPapers));
+			printStatusMessage("IEEEXplore: papers imported.");
+		} catch (IOException | ParsingException e1) {
 			e1.printStackTrace();
 		}
 		
@@ -55,6 +67,11 @@ public class OnlineSearchHandler implements ActionListener {
 		String currentText = window.progressTextArea.getText();
 		currentText += message + "\n";
 		window.progressTextArea.setText(currentText);
+	}
+
+	public void setProgress(double progress) {
+		window.progressBar.setValue((int) (progress * 100.0));
+		
 	}
 
 }

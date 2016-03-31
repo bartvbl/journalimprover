@@ -8,12 +8,15 @@ import java.net.URLConnection;
 
 public class HTTPRequester {
 	public static String request(String address) throws IOException {
+		System.setProperty("http.keepAlive", "false");
 		URL url = new URL(address);
 		URLConnection connection = url.openConnection();
+		connection.setRequestProperty("Connection", "close");
 		BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 		StringBuffer buffer = new StringBuffer();
-		while(reader.ready()) {
-			buffer.append(reader.readLine());
+		String line;
+		while((line = reader.readLine()) != null) {
+			buffer.append(line);
 		}
 		reader.close();
 		return buffer.toString();

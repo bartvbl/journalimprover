@@ -73,11 +73,11 @@ public class CrossRefLoader {
 			Date indexed = parseDate(entry.getJSONObject("indexed"));
 			int referenceCount = entry.getInt("reference-count");
 			String publisher = entry.getString("publisher");
-			String issue = entry.has("issue") ? entry.getString("issue") : "unknown";
+			String issue = entry.has("issue") ? entry.getString("issue") : "";
 			String DOI = entry.getString("DOI");
 			String type = entry.getString("type");
 			Date created = parseDate(entry.getJSONObject("created"));
-			String page = entry.has("page") ? entry.getString("page") : "unknown";
+			String page = entry.has("page") ? entry.getString("page") : "";
 			String source = entry.getString("source");
 			String title = entry.has("title") && entry.getJSONArray("title").length() > 0 ? entry.getJSONArray("title").getString(0) : "";
 			String prefix;
