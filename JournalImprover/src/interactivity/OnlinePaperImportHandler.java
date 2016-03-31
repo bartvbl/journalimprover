@@ -32,7 +32,7 @@ public class OnlinePaperImportHandler {
 				
 				window.importButton.setEnabled(false);
 				
-				window.searchButton.addActionListener(new OnlineSearchHandler(window));
+				window.searchButton.addActionListener(new OnlineSearchHandler(window, eventDispatcher));
 			}
 		});
 	}

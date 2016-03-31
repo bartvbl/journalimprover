@@ -112,7 +112,7 @@ public class PaperBase implements ActionListener, CaretListener, EventHandler, L
 						paperTableModel.setRowCount(0);
 						
 						for(Paper paper : relevantPapers) {
-							paperTableModel.addRow(new String[]{paper.publicationDate, paper.title});
+							paperTableModel.addRow(new String[]{paper.publicationDate.toString(), paper.title});
 						}
 					}
 				});
@@ -126,8 +126,8 @@ public class PaperBase implements ActionListener, CaretListener, EventHandler, L
 			for(Paper paper : paperCollection.values()) {
 				boolean containsTitle = paper.title == null ? false : paper.title.contains(searchQuery);
 				boolean containsAbstract = paper.abstractText == null ? false : paper.abstractText.contains(searchQuery);
-				boolean containsAuthors = paper.authors == null ? false : paper.authors.contains(searchQuery);
-				boolean containsDate = paper.publicationDate == null ? false : paper.publicationDate.contains(searchQuery);
+				boolean containsAuthors = paper.authors == null ? false : paper.containsAuthor(searchQuery);
+				boolean containsDate = paper.publicationDate == null ? false : paper.publicationDate.toString().contains(searchQuery);
 				if(containsTitle || containsAbstract || containsAuthors || containsDate) {
 					relevantPapers.add(paper);
 				}

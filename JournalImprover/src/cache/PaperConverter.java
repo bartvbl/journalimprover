@@ -1,41 +1,83 @@
 package cache;
 
+import data.Author;
+import data.Date;
 import data.Paper;
+import lib.util.StringUtil;
+import nu.xom.Attribute;
 import nu.xom.Element;
+import nu.xom.Elements;
 
 public class PaperConverter {
 	public static Element convertPaperToXML(Paper paper) {
 		Element paperElement = new Element("paper");
 		
-		Element titleElement = new Element("title");
 		Element abstractElement = new Element("abstract");
-		Element dateElement = new Element("date");
-		Element authorElement = new Element("author");
+		Element authorsElement = new Element("authors");
 		
-		titleElement.appendChild(paper.title);
+		Attribute dateAttribute = new Attribute("publicationDate", paper.publicationDate.toString());
+		Attribute titleAttribute = new Attribute("title", paper.title);
+		Attribute subtitleAttribute = new Attribute("subtitle", paper.subtitle);
+		Attribute volumeAttribute = new Attribute("volume", paper.volume);
+		Attribute pageAttribute = new Attribute("page", paper.page);
+		Attribute publisherAttribute = new Attribute("publisher", paper.publisher);
+		
 		abstractElement.appendChild(paper.abstractText);
-		dateElement.appendChild(paper.publicationDate);
-		authorElement.appendChild(paper.authors);
 		
-		paperElement.appendChild(titleElement);
+		for(Author author : paper.authors) {
+			Element authorElement = new Element("author");
+			authorsElement.appendChild(authorElement);
+			
+			Attribute firstNameAttribute = new Attribute("firstName", author.firstName);
+			Attribute lastNameAttribute = new Attribute("lastName", author.lastName);
+			Attribute affiliations = new Attribute("affiliations", StringUtil.createCommaSeparatedList(author.affiliation));
+			
+			authorElement.addAttribute(firstNameAttribute);
+			authorElement.addAttribute(lastNameAttribute);
+			authorElement.addAttribute(affiliations);
+		}
+		
 		paperElement.appendChild(abstractElement);
-		paperElement.appendChild(dateElement);
-		paperElement.appendChild(authorElement);
+		paperElement.appendChild(authorsElement);
+		
+		paperElement.addAttribute(dateAttribute);
+		paperElement.addAttribute(titleAttribute);
+		paperElement.addAttribute(subtitleAttribute);
+		paperElement.addAttribute(volumeAttribute);
+		paperElement.addAttribute(pageAttribute);
+		paperElement.addAttribute(publisherAttribute);
+		
 		return paperElement;
 	}
 	
 	public static Paper convertXMLToPaper(Element paperElement) {
-		Element titleElement = paperElement.getFirstChildElement("title");
 		Element abstractElement = paperElement.getFirstChildElement("abstract");
-		Element dateElement = paperElement.getFirstChildElement("date");
-		Element authorElement = paperElement.getFirstChildElement("author");
+		Element authorsElement = paperElement.getFirstChildElement("authors");
 		
-		String title = titleElement.getValue();
+		Date date = Date.fromString(paperElement.getAttributeValue("publicationDate"));
+		String title = paperElement.getAttributeValue("title");
+		String subtitle = paperElement.getAttributeValue("subtitle");
+		String volume = paperElement.getAttributeValue("volume");
+		String page = paperElement.getAttributeValue("page");
+		String publisher = paperElement.getAttributeValue("publisher");
+		
 		String abstractText = abstractElement.getValue();
-		String date = dateElement.getValue();
-		String author = authorElement.getValue();
+		Author[] authors = parseAuthors(authorsElement);
 		
-		Paper paper = new Paper(title, date, author, abstractText);
+		Paper paper = new Paper(title, subtitle, authors, date, publisher, volume, page, abstractText);
 		return paper;
+	}
+
+	private static Author[] parseAuthors(Element authorsElement) {
+		Elements authorElements = authorsElement.getChildElements();
+		Author[] authors = new Author[authorElements.size()];
+		for(int i = 0; i < authors.length; i++) {
+			Element authorElement = authorElements.get(i);
+			String firstName = authorElement.getAttributeValue("firstName");
+			String lastName = authorElement.getAttributeValue("lastName");
+			String[] affiliations = authorElement.getAttributeValue("affiliations").split(", ");
+			authors[i] = new Author(firstName, lastName, affiliations);
+		}
+		return authors;
 	}
 }

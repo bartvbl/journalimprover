@@ -183,7 +183,7 @@ public class IdeaTracker implements EventHandler {
 				relevantTableModel.setRowCount(0);
 				if(currentIdea != null) {
 					for(Paper paper : currentIdea.relevantPapers) {
-						relevantTableModel.addRow(new String[]{paper.publicationDate, paper.title});
+						relevantTableModel.addRow(new String[]{paper.publicationDate.toString(), paper.title});
 					}
 				}
 			}

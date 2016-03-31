@@ -82,7 +82,8 @@ public class PaperLoader {
 		String authors = entryMap.get("AU");
 		String abstractText = entryMap.get("AB");
 		
-		return new Paper(title, publicationDate, authors, abstractText);
+		throw new RuntimeException("Has to be updated!");
+//		return new Paper(title, publicationDate, authors, abstractText);
 	}
 
 	private static String preprocess(String fileContents) {
