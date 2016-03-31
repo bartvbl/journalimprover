@@ -1,5 +1,4 @@
 package gui;
-
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -49,15 +48,6 @@ public class PaperTrackerWindow extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
     private void initComponents() {
-
-        jComboBox1.setModel(new DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jComboBox1.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                jComboBox1ActionPerformed(evt);
-            }
-        });
-
-        jLabel6.setText("Rating:");
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
@@ -231,6 +221,7 @@ public class PaperTrackerWindow extends javax.swing.JFrame {
         jLabel5.setText("Title:");
 
         paperTitleLabel.setText("Title of paper");
+        paperTitleLabel.setVerticalAlignment(SwingConstants.TOP);
 
         jLabel7.setText("Publication date:");
 
@@ -302,28 +293,7 @@ public class PaperTrackerWindow extends javax.swing.JFrame {
                 .addGroup(jPanel4Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane4)
                     .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGroup(jPanel4Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addGroup(jPanel4Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel4)
-                                    .addGroup(jPanel4Layout.createSequentialGroup()
-                                        .addGroup(jPanel4Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabel7)
-                                            .addComponent(jLabel8)
-                                            .addComponent(jLabel5))
-                                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                        .addGroup(jPanel4Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                                            .addComponent(paperTitleLabel)
-                                            .addComponent(paperAuthorLabel)
-                                            .addComponent(paperDateLabel)))
-                                    .addComponent(jLabel11)
-                                    .addComponent(jLabel13)
-                                    .addGroup(jPanel4Layout.createSequentialGroup()
-                                        .addComponent(jLabel9)
-                                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(ratingComboBox, GroupLayout.PREFERRED_SIZE, 110, GroupLayout.PREFERRED_SIZE)))
-                                .addGap(0, 11, Short.MAX_VALUE))
-                            .addComponent(jScrollPane5))
+                        .addComponent(jScrollPane5, GroupLayout.DEFAULT_SIZE, 460, Short.MAX_VALUE)
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel4Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel4Layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
@@ -337,7 +307,29 @@ public class PaperTrackerWindow extends javax.swing.JFrame {
                             .addGroup(jPanel4Layout.createSequentialGroup()
                                 .addComponent(paperReadCheckbox)
                                 .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(seenCheckBox)))))
+                                .addComponent(seenCheckBox))))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGroup(jPanel4Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel11)
+                            .addComponent(jLabel13)
+                            .addGroup(jPanel4Layout.createSequentialGroup()
+                                .addComponent(jLabel9)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(ratingComboBox, GroupLayout.PREFERRED_SIZE, 110, GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGroup(jPanel4Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel7)
+                            .addComponent(jLabel8)
+                            .addComponent(jLabel5))
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel4Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                            .addComponent(paperDateLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(paperAuthorLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(jPanel4Layout.createSequentialGroup()
+                                .addComponent(paperTitleLabel, GroupLayout.PREFERRED_SIZE, 480, GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 22, Short.MAX_VALUE)))))
                 .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(jPanel4Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
@@ -347,7 +339,7 @@ public class PaperTrackerWindow extends javax.swing.JFrame {
                 .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
-                    .addComponent(paperTitleLabel))
+                    .addComponent(paperTitleLabel, GroupLayout.PREFERRED_SIZE, 63, GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
@@ -355,11 +347,11 @@ public class PaperTrackerWindow extends javax.swing.JFrame {
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
-                    .addComponent(paperAuthorLabel))
+                    .addComponent(paperAuthorLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel11)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane4, GroupLayout.DEFAULT_SIZE, 345, Short.MAX_VALUE)
+                .addComponent(jScrollPane4, GroupLayout.DEFAULT_SIZE, 296, Short.MAX_VALUE)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel13)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
@@ -382,7 +374,9 @@ public class PaperTrackerWindow extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        jSplitPane3.setRightComponent(jPanel4);
+        jScrollPane3.setViewportView(jPanel4);
+
+        jSplitPane3.setRightComponent(jScrollPane3);
 
         jSplitPane1.setRightComponent(jSplitPane3);
 
@@ -425,10 +419,6 @@ public class PaperTrackerWindow extends javax.swing.JFrame {
     private void importPaperHTMLItemActionPerformed(ActionEvent evt) {                                                    
         // TODO add your handling code here:
     }                                                   
-
-    private void jComboBox1ActionPerformed(ActionEvent evt) {                                           
-        // TODO add your handling code here:
-    }                                          
 
     private void seenCheckBoxActionPerformed(ActionEvent evt) {                                             
         // TODO add your handling code here:
@@ -476,7 +466,6 @@ public class PaperTrackerWindow extends javax.swing.JFrame {
     public final JList<String> ideaList = new JList<>();
     public final JTextField ideaNameField = new JTextField();
     public final JMenuItem importPaperHTMLItem = new JMenuItem();
-    public final JComboBox<String> jComboBox1 = new JComboBox<>();
     public final JLabel jLabel1 = new JLabel();
     public final JLabel jLabel10 = new JLabel();
     public final JLabel jLabel11 = new JLabel();
@@ -487,7 +476,6 @@ public class PaperTrackerWindow extends javax.swing.JFrame {
     public final JLabel jLabel3 = new JLabel();
     public final JLabel jLabel4 = new JLabel();
     public final JLabel jLabel5 = new JLabel();
-    public final JLabel jLabel6 = new JLabel();
     public final JLabel jLabel7 = new JLabel();
     public final JLabel jLabel8 = new JLabel();
     public final JLabel jLabel9 = new JLabel();
@@ -501,6 +489,7 @@ public class PaperTrackerWindow extends javax.swing.JFrame {
     public final JPanel jPanel5 = new JPanel();
     public final JScrollPane jScrollPane1 = new JScrollPane();
     public final JScrollPane jScrollPane2 = new JScrollPane();
+    public final JScrollPane jScrollPane3 = new JScrollPane();
     public final JScrollPane jScrollPane4 = new JScrollPane();
     public final JScrollPane jScrollPane5 = new JScrollPane();
     public final JScrollPane jScrollPane6 = new JScrollPane();
@@ -524,3 +513,4 @@ public class PaperTrackerWindow extends javax.swing.JFrame {
     public final JCheckBox seenCheckBox = new JCheckBox();
     // End of variables declaration                   
 }
+

@@ -13,22 +13,23 @@ import lib.util.HTTPRequester;
 import data.Author;
 import data.Date;
 import data.Paper;
+import interactivity.OnlineSearchHandler;
 
 public class CrossRefLoader {
 	private static final String baseURL = "http://api.crossref.org/";
 	private static final int papersPerRequest = 1000;
 	private static final int numRequests = 5;
 
-	public static Paper[] query(String query) throws IOException {
+	public static Paper[] query(String query, OnlineSearchHandler onlineSearchHandler) throws IOException {
 		Paper[] foundPapers = new Paper[0];
 		for(int i = 0; i < numRequests; i++) {
-			System.out.println("CrossRef: Request " + i + " of " + numRequests);
+			onlineSearchHandler.printStatusMessage("CrossRef: Request " + i + " of " + numRequests);
 			Paper[] result = query(query, i * papersPerRequest, papersPerRequest);
 			Paper[] newPaperArray = new Paper[foundPapers.length + result.length];
 			System.arraycopy(foundPapers, 0, newPaperArray, 0, foundPapers.length);
 			System.arraycopy(result, 0, newPaperArray, foundPapers.length, result.length);
 			foundPapers = newPaperArray;
-			System.out.println("CrossRef: Complete.");
+			onlineSearchHandler.printStatusMessage("CrossRef: Complete.");
 			try {
 				Thread.sleep(10000); // Being nice to the API
 			} catch (InterruptedException e) {
@@ -62,6 +63,7 @@ public class CrossRefLoader {
 			papers[i] = parsePaper(entry);
 			entryMap.addAll(entry.keySet());
 		}
+		System.out.println("Entries: " + entryMap);
 		
 		return papers;
 	}
@@ -111,7 +113,7 @@ public class CrossRefLoader {
 			JSONObject entry = authorList.getJSONObject(authorID);
 			String firstName = entry.has("given") ? entry.getString("given") : "";
 			String lastName = entry.has("family") ? entry.getString("family") : "";
-			String[] affiliations = entry.has("affiliation") ? parseAffiliationArray(entry.getJSONArray("affiliation")) : new String[0];
+			String[] affiliations = entry.has("affiliation") && entry.getJSONArray("affiliation").length() > 1 ? parseAffiliationArray(entry.getJSONArray("affiliation")) : new String[0];
 			
 			authors[authorID] = new Author(firstName, lastName, affiliations);
 		}

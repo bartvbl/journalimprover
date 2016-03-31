@@ -48,10 +48,10 @@ public class Paper {
 	}
 
 	public String createAuthorString() {
-		String affiliationString = (authors[0].affiliation.length > 0 ? "(" + StringUtil.createCommaSeparatedList(authors[0].affiliation) + ")" : "");
+		String affiliationString = (authors[0].affiliation.length > 0 && !authors[0].affiliation[0].equals("") ? " (" + StringUtil.createCommaSeparatedList(authors[0].affiliation) + ")" : "");
 		String authorString = authors[0].firstName + " " + authors[0].lastName + affiliationString + "\n";
 		for(int i = 1; i < authors.length; i++) {
-			affiliationString = (authors[i].affiliation.length > 0 ? "(" + StringUtil.createCommaSeparatedList(authors[i].affiliation) + ")" : "");
+			affiliationString = (authors[i].affiliation.length > 0 && !authors[0].affiliation[0].equals("") ? " (" + StringUtil.createCommaSeparatedList(authors[i].affiliation) + ")" : "");
 			authorString += authors[i].firstName + " " + authors[i].lastName + affiliationString + "\n";
 		}
 		return authorString;

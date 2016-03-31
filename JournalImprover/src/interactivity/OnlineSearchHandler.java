@@ -40,7 +40,7 @@ public class OnlineSearchHandler implements ActionListener {
 		String query = window.searchPapersField.getText();
 		
 		try {
-			Paper[] crossRefPapers = CrossRefLoader.query(query);
+			Paper[] crossRefPapers = CrossRefLoader.query(query, this);
 			printStatusMessage("CrossRef returned " + crossRefPapers.length + " papers.");
 			eventDispatcher.dispatchEvent(new Event<Paper[]>(EventType.IMPORT_PAPERS, crossRefPapers));
 		} catch (IOException e1) {
@@ -51,7 +51,7 @@ public class OnlineSearchHandler implements ActionListener {
 		window.searchPapersField.setEnabled(true);
 	}
 
-	private void printStatusMessage(String message) {
+	public void printStatusMessage(String message) {
 		String currentText = window.progressTextArea.getText();
 		currentText += message + "\n";
 		window.progressTextArea.setText(currentText);

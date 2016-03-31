@@ -16,6 +16,7 @@ import javax.swing.event.CaretListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 
 import cache.PaperBaseCache;
 import data.Paper;
@@ -32,7 +33,7 @@ public class PaperBase implements ActionListener, CaretListener, EventHandler, L
 	private final PaperTrackerWindow window;
 	private final EventDispatcher eventDispatcher;
 	
-	private final DefaultTableModel paperTableModel;
+	private final PaperTrackerTableModel paperTableModel;
 	
 	private final HashMap<String, Paper> paperCollection;
 	private final DefaultListSelectionModel paperTableSelectionModel;
@@ -43,7 +44,7 @@ public class PaperBase implements ActionListener, CaretListener, EventHandler, L
 		this.window = window;
 		this.eventDispatcher = mainDispatcher;
 		
-		this.paperTableModel = new DefaultTableModel();
+		this.paperTableModel = new PaperTrackerTableModel();
 		this.paperTableSelectionModel = new DefaultListSelectionModel();
 		
 		paperTableModel.setColumnCount(2);
@@ -54,6 +55,9 @@ public class PaperBase implements ActionListener, CaretListener, EventHandler, L
 		
 		window.paperTable.setModel(paperTableModel);
 		window.paperTable.setSelectionModel(paperTableSelectionModel);
+		
+		window.paperTable.setDragEnabled(false);
+		window.paperTable.setRowSorter(new TableRowSorter(paperTableModel));
 		
 		window.searchPapersField.addCaretListener(this);
 		window.addRelevantPaperButton.addActionListener(this);

@@ -13,6 +13,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 
 import cache.IdeaCache;
 import data.Idea;
@@ -91,7 +92,10 @@ public class IdeaTracker implements EventHandler {
 			}
 		});
 		
-		this.relevantTableModel = new DefaultTableModel(new String[]{"Date", "Title"}, 0);
+		this.relevantTableModel = new PaperTrackerTableModel();
+		relevantTableModel.setColumnIdentifiers(new String[]{"Date", "Title"});
+		window.relevantPaperTable.setDragEnabled(false);
+		window.relevantPaperTable.setRowSorter(new TableRowSorter(relevantTableModel));
 		
 		window.relevantPaperTable.setModel(relevantTableModel);
 		window.relevantPaperTable.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
