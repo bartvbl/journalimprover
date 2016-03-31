@@ -12,6 +12,7 @@ public class Paper {
 	public final String publisher;
 	public final String volume;
 	public final String page;
+	public String PDFURL = null;
 
 	public Paper(String title, String subtitle, Author[] authors, Date publicationDate, String publisher, String volume, String page, String abstractText) {
 		this.title = title;
@@ -55,5 +56,9 @@ public class Paper {
 			authorString += authors[i].firstName + " " + authors[i].lastName + affiliationString + "\n";
 		}
 		return authorString;
+	}
+
+	public void setPDFURL(String pdfURL) {
+		this.PDFURL  = pdfURL;
 	}
 }

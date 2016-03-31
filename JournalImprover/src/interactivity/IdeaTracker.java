@@ -113,9 +113,9 @@ public class IdeaTracker implements EventHandler {
 					window.removeRelevantPaperButton.setEnabled(false);
 					return;
 				}
-				
+				int modelIndex = window.relevantPaperTable.convertRowIndexToModel(selectedIndex);
 				window.removeRelevantPaperButton.setEnabled(true);
-				Paper selectedRelevantPaper = selectedIdea.relevantPapers.get(selectedIndex);
+				Paper selectedRelevantPaper = selectedIdea.relevantPapers.get(modelIndex);
 				eventDispatcher.dispatchEvent(new Event<Paper>(EventType.PAPER_SELECTED, selectedRelevantPaper));
 			}
 		});
@@ -133,7 +133,8 @@ public class IdeaTracker implements EventHandler {
 				if(selectedIndex < 0 || selectedIndex >= selectedIdea.relevantPapers.size()) {
 					return;
 				}
-				selectedIdea.relevantPapers.remove(selectedIndex);
+				int modelIndex = window.relevantPaperTable.convertRowIndexToModel(selectedIndex);
+				selectedIdea.relevantPapers.remove(modelIndex);
 				refreshRelevantPaperList();
 				writeCache();
 			}

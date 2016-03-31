@@ -121,6 +121,7 @@ public class PaperBase implements ActionListener, CaretListener, EventHandler, L
 						for(Paper paper : relevantPapers) {
 							paperTableModel.addRow(new String[]{paper.publicationDate.toString(), paper.title});
 						}
+						window.revalidate();
 					}
 				});
 			}
@@ -152,7 +153,8 @@ public class PaperBase implements ActionListener, CaretListener, EventHandler, L
 		if(index < 0 || index >= currentDisplayedPapers.length) {
 			return;
 		}
-		Paper selectedPaper = currentDisplayedPapers[index];
+		int modelIndex = window.paperTable.convertRowIndexToModel(index);
+		Paper selectedPaper = currentDisplayedPapers[modelIndex];
 		eventDispatcher.dispatchEvent(new Event<Paper>(EventType.PAPER_SELECTED, selectedPaper));
 	}
 

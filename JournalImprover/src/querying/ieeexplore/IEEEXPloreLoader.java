@@ -26,6 +26,8 @@ public class IEEEXPloreLoader {
 	public static Paper[] query(String query, OnlineSearchHandler onlineSearchHandler) throws IOException, ValidityException, ParsingException {
 		Paper[] foundPapers = new Paper[0];
 		for(int i = 0; i < numRequests; i++) {
+			onlineSearchHandler.printStatusMessage("IEEEXPlore: Request " + i + " of " + numRequests);
+			
 			// Sequence number is 1-indexed
 			String url = baseURL + "queryText=" + query + "&hc=" + papersPerRequest + "&rs=" + ((i * papersPerRequest) + 1);
 			Element rootElement = requestDocument(url, onlineSearchHandler);
@@ -94,6 +96,8 @@ public class IEEEXPloreLoader {
 		}
 		
 		Paper paper = new Paper(title, "", authors, publicationYear, publisher, volume, pages, abstractText);
+		
+		paper.setPDFURL(pdfURL);
 		
 		return paper;
 		} catch(Exception e) {
