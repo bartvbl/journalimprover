@@ -96,7 +96,8 @@ public class Paper {
 			this.page = paper.page;
 		}	
 
-		if(this.PDFURL.equals("") && !paper.PDFURL.equals("")) {
+		
+		if((this.PDFURL == null || this.PDFURL.equals("")) && (paper.PDFURL != null && !paper.PDFURL.equals(""))) {
 			this.PDFURL = paper.PDFURL;
 		}
 	}

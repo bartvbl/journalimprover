@@ -62,6 +62,12 @@ public class OnlineSearchHandler implements ActionListener {
 			printStatusMessage("ScienceDirect: returned " + scienceDirectPapers.length + " papers.");
 			eventDispatcher.dispatchEvent(new Event<Paper[]>(EventType.IMPORT_PAPERS, scienceDirectPapers));
 			printStatusMessage("ScienceDirect: papers imported.");
+			
+			printStatusMessage("Scopus: Querying..");
+			Paper[] scopusPapers = ScienceDirectLoader.query(query, this);
+			printStatusMessage("Scopus: returned " + scopusPapers.length + " papers.");
+			eventDispatcher.dispatchEvent(new Event<Paper[]>(EventType.IMPORT_PAPERS, scopusPapers));
+			printStatusMessage("Scopus: papers imported.");
 		} catch (IOException | ParsingException e1) {
 			e1.printStackTrace();
 		}
