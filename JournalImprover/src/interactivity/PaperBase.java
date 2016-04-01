@@ -92,9 +92,8 @@ public class PaperBase implements ActionListener, CaretListener, EventHandler, L
 			for(Paper paper : loadedPapers) {
 				if(!paperCollection.containsKey(paper.title)) {
 					paperCollection.put(paper.title, paper);
-				} else if(paperCollection.get(paper.title).abstractText.equals("")){
-					System.out.println("Found an abstract for " + paper.title + ".");
-					paperCollection.get(paper.title).abstractText = paper.abstractText;
+				} else {
+					paperCollection.get(paper.title).update(paper);
 				}
 				progressWindow.incrementProgress(1);
 			}

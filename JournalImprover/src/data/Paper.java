@@ -5,13 +5,13 @@ import lib.util.StringUtil;
 public class Paper {
 
 	public final String title;
-	public final Date publicationDate;
-	public final Author[] authors;
+	public Date publicationDate;
+	public Author[] authors;
 	public String abstractText;
 	public final String subtitle;
-	public final String publisher;
-	public final String volume;
-	public final String page;
+	public String publisher;
+	public String volume;
+	public String page;
 	public String PDFURL = null;
 
 	public Paper(String title, String subtitle, Author[] authors, Date publicationDate, String publisher, String volume, String page, String abstractText) {
@@ -60,5 +60,44 @@ public class Paper {
 
 	public void setPDFURL(String pdfURL) {
 		this.PDFURL  = pdfURL;
+	}
+
+	public void update(Paper paper) {
+		int newNumDefinedDateFields = 
+				(paper.publicationDate.day != 0 ? 1 : 0) +
+				(paper.publicationDate.month != 0 ? 1 : 0) +
+				(paper.publicationDate.year != 0 ? 1 : 0);
+		int currentNumDefinedDateFields = 
+				(this.publicationDate.day != 0 ? 1 : 0) +
+				(this.publicationDate.month != 0 ? 1 : 0) +
+				(this.publicationDate.year != 0 ? 1 : 0);
+		if(newNumDefinedDateFields > currentNumDefinedDateFields) {
+			this.publicationDate = paper.publicationDate;
+		}
+		
+		if(this.authors.length == 0 && paper.authors.length > 0) {
+			this.authors = paper.authors;
+		}
+		
+		if(this.abstractText.equals("") && !paper.abstractText.equals("")) {
+			System.out.println("Found an abstract for " + paper.title + ".");
+			this.abstractText = paper.abstractText;
+		}
+
+		if(this.publisher.equals("") && !paper.publisher.equals("")) {
+			this.publisher = paper.publisher;
+		}
+
+		if(this.volume.equals("") && !paper.volume.equals("")) {
+			this.volume = paper.volume;
+		}
+
+		if(this.page.equals("") && !paper.page.equals("")) {
+			this.page = paper.page;
+		}	
+
+		if(this.PDFURL.equals("") && !paper.PDFURL.equals("")) {
+			this.PDFURL = paper.PDFURL;
+		}
 	}
 }

@@ -23,7 +23,7 @@ public class ScienceDirectLoader {
 
 	private static final String baseURL = "http://api.elsevier.com/content/search/scidir";
 	private static final int papersPerRequest = 200;
-	private static final int numRequests = 5;
+	private static final int numRequests = 15;
 	
 	private static final HashMap<String, String> URIMap = new HashMap<String, String>();
 	

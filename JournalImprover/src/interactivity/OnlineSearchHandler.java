@@ -46,13 +46,13 @@ public class OnlineSearchHandler implements ActionListener {
 		
 		try {
 			printStatusMessage("CrossRef: Querying..");
-			Paper[] crossRefPapers = new Paper[0]; //CrossRefLoader.query(query, this);
+			Paper[] crossRefPapers = CrossRefLoader.query(query, this);
 			printStatusMessage("CrossRef returned " + crossRefPapers.length + " papers.");
 			eventDispatcher.dispatchEvent(new Event<Paper[]>(EventType.IMPORT_PAPERS, crossRefPapers));
 			printStatusMessage("CrossRef papers imported.");
 			
 			printStatusMessage("IEEEXPlore: Querying..");
-			Paper[] ieeexplorePapers = new Paper[0]; //IEEEXPloreLoader.query(query, this);
+			Paper[] ieeexplorePapers = IEEEXPloreLoader.query(query, this);
 			printStatusMessage("IEEEXPlore: returned " + ieeexplorePapers.length + " papers.");
 			eventDispatcher.dispatchEvent(new Event<Paper[]>(EventType.IMPORT_PAPERS, ieeexplorePapers));
 			printStatusMessage("IEEEXplore: papers imported.");
