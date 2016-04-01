@@ -92,10 +92,13 @@ public class PaperBase implements ActionListener, CaretListener, EventHandler, L
 			for(Paper paper : loadedPapers) {
 				if(!paperCollection.containsKey(paper.title)) {
 					paperCollection.put(paper.title, paper);
-					updatePaperList();
+				} else if(paperCollection.get(paper.title).abstractText.equals("")){
+					System.out.println("Found an abstract for " + paper.title + ".");
+					paperCollection.get(paper.title).abstractText = paper.abstractText;
 				}
 				progressWindow.incrementProgress(1);
 			}
+			updatePaperList();
 			WorkerThread.enqueue(new Runnable() {
 				public void run() {
 					PaperBaseCache.store(paperCollection.values());
@@ -118,6 +121,7 @@ public class PaperBase implements ActionListener, CaretListener, EventHandler, L
 						for(Paper paper : relevantPapers) {
 							paperTableModel.addRow(new String[]{paper.publicationDate.toString(), paper.title});
 						}
+						window.revalidate();
 					}
 				});
 			}
@@ -149,7 +153,8 @@ public class PaperBase implements ActionListener, CaretListener, EventHandler, L
 		if(index < 0 || index >= currentDisplayedPapers.length) {
 			return;
 		}
-		Paper selectedPaper = currentDisplayedPapers[index];
+		int modelIndex = window.paperTable.convertRowIndexToModel(index);
+		Paper selectedPaper = currentDisplayedPapers[modelIndex];
 		eventDispatcher.dispatchEvent(new Event<Paper>(EventType.PAPER_SELECTED, selectedPaper));
 	}
 

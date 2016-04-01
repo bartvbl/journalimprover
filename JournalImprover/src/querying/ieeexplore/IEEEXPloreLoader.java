@@ -26,6 +26,8 @@ public class IEEEXPloreLoader {
 	public static Paper[] query(String query, OnlineSearchHandler onlineSearchHandler) throws IOException, ValidityException, ParsingException {
 		Paper[] foundPapers = new Paper[0];
 		for(int i = 0; i < numRequests; i++) {
+			onlineSearchHandler.printStatusMessage("IEEEXPlore: Request " + i + " of " + numRequests);
+			
 			// Sequence number is 1-indexed
 			String url = baseURL + "queryText=" + query + "&hc=" + papersPerRequest + "&rs=" + ((i * papersPerRequest) + 1);
 			Element rootElement = requestDocument(url, onlineSearchHandler);
@@ -95,6 +97,8 @@ public class IEEEXPloreLoader {
 		
 		Paper paper = new Paper(title, "", authors, publicationYear, publisher, volume, pages, abstractText);
 		
+		paper.setPDFURL(pdfURL);
+		
 		return paper;
 		} catch(Exception e) {
 			System.out.println("Error occurred in parsing: ");
@@ -124,12 +128,10 @@ public class IEEEXPloreLoader {
 
 	private static Element requestDocument(String url, OnlineSearchHandler onlineSearchHandler) throws IOException, ParsingException, ValidityException {
 		String responseString = HTTPRequester.request(url);
-		onlineSearchHandler.printStatusMessage("IEEEXPlore: XML Response received.");
 		Builder builder = new Builder();
 		InputStream stream = new ByteArrayInputStream(responseString.getBytes(StandardCharsets.UTF_8));
 		Document document = builder.build(stream);
 		Element rootElement = document.getRootElement();
-		onlineSearchHandler.printStatusMessage("IEEEXPlore: XML Response parsed.");
 		return rootElement;
 	}
 

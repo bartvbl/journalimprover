@@ -22,6 +22,11 @@ public class PaperConverter {
 		Attribute pageAttribute = new Attribute("page", paper.page);
 		Attribute publisherAttribute = new Attribute("publisher", paper.publisher);
 		
+		if(paper.PDFURL != null) {
+			Attribute pdfAttribute = new Attribute("pdfurl", paper.PDFURL);
+			paperElement.addAttribute(pdfAttribute);
+		}
+		
 		abstractElement.appendChild(paper.abstractText);
 		
 		for(Author author : paper.authors) {
@@ -65,6 +70,9 @@ public class PaperConverter {
 		Author[] authors = parseAuthors(authorsElement);
 		
 		Paper paper = new Paper(title, subtitle, authors, date, publisher, volume, page, abstractText);
+		
+		paper.PDFURL = paperElement.getAttributeValue("pdfurl");
+		
 		return paper;
 	}
 
