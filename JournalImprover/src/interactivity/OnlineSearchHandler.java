@@ -14,6 +14,7 @@ import nu.xom.ParsingException;
 import querying.crossref.CrossRefLoader;
 import querying.ieeexplore.IEEEXPloreLoader;
 import querying.scienceDirect.ScienceDirectLoader;
+import querying.springer.SpringerLoader;
 import data.Paper;
 
 public class OnlineSearchHandler implements ActionListener {
@@ -68,6 +69,13 @@ public class OnlineSearchHandler implements ActionListener {
 			printStatusMessage("Scopus: returned " + scopusPapers.length + " papers.");
 			eventDispatcher.dispatchEvent(new Event<Paper[]>(EventType.IMPORT_PAPERS, scopusPapers));
 			printStatusMessage("Scopus: papers imported.");
+			
+			
+			printStatusMessage("Springer: Querying..");
+			Paper[] springerPapers = SpringerLoader.query(query, this);
+			printStatusMessage("Springer: returned " + springerPapers.length + " papers.");
+			eventDispatcher.dispatchEvent(new Event<Paper[]>(EventType.IMPORT_PAPERS, springerPapers));
+			printStatusMessage("Springer: papers imported.");
 		} catch (IOException | ParsingException e1) {
 			e1.printStackTrace();
 		}
