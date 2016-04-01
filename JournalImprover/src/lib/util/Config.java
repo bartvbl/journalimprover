@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.HashMap;
 
 public class Config {
-	private static final File configLocation = new File("cgf/apikeys.cfg");
+	private static final File configLocation = new File("cfg/apikeys.cfg").getAbsoluteFile();
 	private static final Config config = Config.load(configLocation);
 	
 	private final HashMap<String, String> configMap;

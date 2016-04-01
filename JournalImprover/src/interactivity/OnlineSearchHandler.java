@@ -13,6 +13,7 @@ import lib.util.WorkerThread;
 import nu.xom.ParsingException;
 import querying.crossref.CrossRefLoader;
 import querying.ieeexplore.IEEEXPloreLoader;
+import querying.scienceDirect.ScienceDirectLoader;
 import data.Paper;
 
 public class OnlineSearchHandler implements ActionListener {
@@ -45,16 +46,22 @@ public class OnlineSearchHandler implements ActionListener {
 		
 		try {
 			printStatusMessage("CrossRef: Querying..");
-			Paper[] crossRefPapers = CrossRefLoader.query(query, this);
+			Paper[] crossRefPapers = new Paper[0]; //CrossRefLoader.query(query, this);
 			printStatusMessage("CrossRef returned " + crossRefPapers.length + " papers.");
 			eventDispatcher.dispatchEvent(new Event<Paper[]>(EventType.IMPORT_PAPERS, crossRefPapers));
 			printStatusMessage("CrossRef papers imported.");
 			
 			printStatusMessage("IEEEXPlore: Querying..");
-			Paper[] ieeexplorePapers = IEEEXPloreLoader.query(query, this);
+			Paper[] ieeexplorePapers = new Paper[0]; //IEEEXPloreLoader.query(query, this);
 			printStatusMessage("IEEEXPlore: returned " + ieeexplorePapers.length + " papers.");
 			eventDispatcher.dispatchEvent(new Event<Paper[]>(EventType.IMPORT_PAPERS, ieeexplorePapers));
 			printStatusMessage("IEEEXplore: papers imported.");
+			
+			printStatusMessage("ScienceDirect: Querying..");
+			Paper[] scienceDirectPapers = ScienceDirectLoader.query(query, this);
+			printStatusMessage("ScienceDirect: returned " + scienceDirectPapers.length + " papers.");
+			eventDispatcher.dispatchEvent(new Event<Paper[]>(EventType.IMPORT_PAPERS, scienceDirectPapers));
+			printStatusMessage("ScienceDirect: paprts imported.");
 		} catch (IOException | ParsingException e1) {
 			e1.printStackTrace();
 		}
