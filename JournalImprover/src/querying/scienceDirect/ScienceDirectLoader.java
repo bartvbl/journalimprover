@@ -22,7 +22,7 @@ import nu.xom.ValidityException;
 public class ScienceDirectLoader {
 
 	private static final String baseURL = "http://api.elsevier.com/content/search/scidir";
-	private static final int papersPerRequest = 125;
+	private static final int papersPerRequest = 200;
 	private static final int numRequests = 5;
 	
 	private static final HashMap<String, String> URIMap = new HashMap<String, String>();
@@ -90,26 +90,27 @@ public class ScienceDirectLoader {
 			// prism:url - unsupported
 			String title = entry.getFirstChildElement("title", URIMap.get("dc")).getValue();
 			// dc:creator - unsupported
-			String abstractText = entry.getFirstChildElement("description", URIMap.get("dc")) != null ? entry.getFirstChildElement("description", URIMap.get("dc")).getValue() : "";
+			String abstractText = getEntryValue(entry, "description", "dc", "");
 			// prism:publicationName - unsupported
 			// prism:issn - unsupported
-			String volume = entry.getFirstChildElement("volume", URIMap.get("prism")) != null && entry.getFirstChildElement("volume", URIMap.get("prism")).getChildCount() != 0 ? entry.getFirstChildElement("volume", URIMap.get("prism")).getValue() : "";
+			String volume = getEntryValue(entry, "volume", "prism", "");
 			// prism:issueIdentifier - unsupported
 			Date publicationDate = parseDate(entry);
 			// prism:coverDisplayDate - unsupported
-			String pages = entry.getFirstChildElement("startingPage", URIMap.get("prism")) != null ?
-					entry.getFirstChildElement("startingPage", URIMap.get("prism")).getValue() + 
-					(entry.getFirstChildElement("endingPage", URIMap.get("prism")) != null ? " - " + entry.getFirstChildElement("endingPage", URIMap.get("prism")).getValue() : "")
-					: "";
-			String DOI = entry.getFirstChildElement("doi", URIMap.get("prism")).getValue();
+			String pages = 
+					hasChild(entry, "startingPage", "prism") ? 
+							getEntryValue(entry, "startingPage", "prism", "") + 
+							(hasChild(entry, "endingPage", "prism") ? " - " + getEntryValue(entry, "endingPage", "prism", "") : "") 
+							: "";
+			String DOI = getEntryValue(entry, "DOI", "prism", "");
 			// openaccess - unsupported
 			// openaccessArticle - unsupported
 			// openArchiveArticle - unsupported
 			// openacessUserLicense - unsupported
 			// prism:aggregationType - unsupported
-			String publisher = entry.getFirstChildElement("copyright", URIMap.get("prism")).getValue();
+			String publisher = getEntryValue(entry, "copyright", "prism", "");
 			// pii - unsupported
-			Author[] authors = entry.getFirstChildElement("authors", URIMap.get("Atom")) != null ? parseAuthors(entry.getFirstChildElement("authors", URIMap.get("Atom"))) : new Author[0];
+			Author[] authors = hasChild(entry, "authors", "Atom") ? parseAuthors(entry.getFirstChildElement("authors", URIMap.get("Atom"))) : new Author[0];
 			
 			Paper paper = new Paper(title, "", authors, publicationDate, publisher, volume, pages, abstractText);
 			
@@ -124,9 +125,25 @@ public class ScienceDirectLoader {
 			throw new RuntimeException("Failed to parse XML document!", e);
 		}
 	}
+	
+	private static boolean hasChild(Element entry, String name, String URIName) {
+		Element foundElement = entry.getFirstChildElement(name, URIMap.get(URIName));
+		return foundElement != null;
+	}
+
+	private static String getEntryValue(Element entry, String name, String URIName, String defaultValue) {
+		Element foundElement = entry.getFirstChildElement(name, URIMap.get(URIName));
+		if(foundElement == null) {
+			return defaultValue;
+		}
+		if(foundElement.getChildCount() == 0) {
+			return defaultValue;
+		}
+		return entry.getFirstChildElement(name, URIMap.get(URIName)).getValue();
+	}
 
 	private static Date parseDate(Element entry) {
-		String dateString = entry.getFirstChildElement("coverDate", URIMap.get("prism")).getValue();
+		String dateString = getEntryValue(entry, "coverDate", "prism", "");
 		String[] dateParts = dateString.split("-");
 		
 		return new Date(
@@ -141,10 +158,8 @@ public class ScienceDirectLoader {
 		Author[] authors = new Author[authorElements.size()];
 		for(int i = 0; i < authors.length; i++) {
 			Element authorElement = authorElements.get(i);
-			String firstName = authorElement.getFirstChildElement("given-name", URIMap.get("Atom")) != null ? 
-					authorElement.getFirstChildElement("given-name", URIMap.get("Atom")).getValue() : "";
-			String lastName = authorElement.getFirstChildElement("surname", URIMap.get("Atom")) != null ?
-					authorElement.getFirstChildElement("surname", URIMap.get("Atom")).getValue() : "";
+			String firstName = getEntryValue(authorElement, "given-name", "Atom", "");
+			String lastName = getEntryValue(authorElement, "surname", "Atom", "");
 			authors[i] = new Author(firstName, lastName, new String[0]);
 		}
 		return authors;
