@@ -1,4 +1,5 @@
 package gui;
+
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -53,58 +54,8 @@ public class PaperTrackerWindow extends javax.swing.JFrame {
 
         jSplitPane1.setDividerLocation(250);
 
-        jSplitPane2.setDividerLocation(150);
+        jSplitPane2.setDividerLocation(400);
         jSplitPane2.setOrientation(JSplitPane.VERTICAL_SPLIT);
-
-        addIdeaButton.setText("Add");
-
-        ideaList.setModel(new AbstractListModel() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
-        });
-        jScrollPane2.setViewportView(ideaList);
-
-        jLabel1.setFont(new Font("Tahoma", 1, 11)); // NOI18N
-        jLabel1.setText("Ideas");
-
-        deleteIdeaButton.setText("Delete selected");
-
-        GroupLayout jPanel1Layout = new GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(ideaNameField)
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(addIdeaButton))
-                    .addGroup(GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 120, Short.MAX_VALUE)
-                        .addComponent(deleteIdeaButton)))
-                .addContainerGap())
-        );
-        jPanel1Layout.setVerticalGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1)
-                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                    .addComponent(ideaNameField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                    .addComponent(addIdeaButton))
-                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, GroupLayout.DEFAULT_SIZE, 49, Short.MAX_VALUE)
-                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(deleteIdeaButton)
-                .addContainerGap())
-        );
-
-        jSplitPane2.setTopComponent(jPanel1);
 
         jLabel2.setFont(new Font("Tahoma", 1, 11)); // NOI18N
         jLabel2.setText("Papers relevant to idea");
@@ -126,7 +77,8 @@ public class PaperTrackerWindow extends javax.swing.JFrame {
 
         GroupLayout jPanel2Layout = new GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(jPanel2Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
@@ -140,20 +92,110 @@ public class PaperTrackerWindow extends javax.swing.JFrame {
                     .addComponent(jScrollPane1, GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addContainerGap())
         );
-        jPanel2Layout.setVerticalGroup(jPanel2Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel2)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(relevantPapersSearchField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, GroupLayout.DEFAULT_SIZE, 398, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, GroupLayout.DEFAULT_SIZE, 417, Short.MAX_VALUE)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(removeRelevantPaperButton)
                 .addContainerGap())
         );
 
         jSplitPane2.setRightComponent(jPanel2);
+
+        jSplitPane4.setDividerLocation(250);
+        jSplitPane4.setOrientation(JSplitPane.VERTICAL_SPLIT);
+
+        addIdeaButton.setText("Add");
+
+        ideaList.setModel(new AbstractListModel() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public Object getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane2.setViewportView(ideaList);
+
+        jLabel1.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        jLabel1.setText("Ideas");
+
+        deleteIdeaButton.setText("Delete selected");
+
+        GroupLayout jPanel1Layout = new GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(ideaNameField)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(addIdeaButton))
+                    .addGroup(GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGap(0, 118, Short.MAX_VALUE)
+                        .addComponent(deleteIdeaButton)))
+                .addContainerGap())
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                    .addComponent(ideaNameField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                    .addComponent(addIdeaButton))
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, GroupLayout.DEFAULT_SIZE, 149, Short.MAX_VALUE)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(deleteIdeaButton)
+                .addContainerGap())
+        );
+
+        jSplitPane4.setTopComponent(jPanel1);
+
+        jLabel6.setFont(new Font("Tahoma", 1, 11)); // NOI18N
+        jLabel6.setText("Notes on idea");
+
+        notesIdeaBox.setColumns(20);
+        notesIdeaBox.setRows(5);
+        jScrollPane7.setViewportView(notesIdeaBox);
+
+        GroupLayout jPanel6Layout = new GroupLayout(jPanel6);
+        jPanel6.setLayout(jPanel6Layout);
+        jPanel6Layout.setHorizontalGroup(
+            jPanel6Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel6Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane7, GroupLayout.DEFAULT_SIZE, 240, Short.MAX_VALUE)
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addComponent(jLabel6)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        jPanel6Layout.setVerticalGroup(
+            jPanel6Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel6)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane7, GroupLayout.DEFAULT_SIZE, 101, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        jSplitPane4.setRightComponent(jPanel6);
+
+        jSplitPane2.setLeftComponent(jSplitPane4);
 
         jSplitPane1.setLeftComponent(jSplitPane2);
 
@@ -187,7 +229,8 @@ public class PaperTrackerWindow extends javax.swing.JFrame {
 
         GroupLayout jPanel3Layout = new GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(jPanel3Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
@@ -200,7 +243,8 @@ public class PaperTrackerWindow extends javax.swing.JFrame {
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
-        jPanel3Layout.setVerticalGroup(jPanel3Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel3)
@@ -236,9 +280,7 @@ public class PaperTrackerWindow extends javax.swing.JFrame {
         paperAbstractField.setColumns(20);
         paperAbstractField.setFont(new Font("Calibri", 0, 12)); // NOI18N
         paperAbstractField.setRows(5);
-        paperAbstractField.setTabSize(4);
         paperAbstractField.setText("Something very interesting.");
-        paperAbstractField.setWrapStyleWord(true);
         jScrollPane4.setViewportView(paperAbstractField);
 
         paperShowPDFButton.setText("Show PDF");
@@ -263,13 +305,15 @@ public class PaperTrackerWindow extends javax.swing.JFrame {
 
         GroupLayout jPanel5Layout = new GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
-        jPanel5Layout.setHorizontalGroup(jPanel5Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel10, GroupLayout.DEFAULT_SIZE, 98, Short.MAX_VALUE)
                 .addContainerGap())
         );
-        jPanel5Layout.setVerticalGroup(jPanel5Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel10)
@@ -289,7 +333,8 @@ public class PaperTrackerWindow extends javax.swing.JFrame {
 
         GroupLayout jPanel4Layout = new GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(jPanel4Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
@@ -334,7 +379,8 @@ public class PaperTrackerWindow extends javax.swing.JFrame {
                                 .addGap(0, 22, Short.MAX_VALUE)))))
                 .addContainerGap())
         );
-        jPanel4Layout.setVerticalGroup(jPanel4Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel4)
@@ -404,10 +450,12 @@ public class PaperTrackerWindow extends javax.swing.JFrame {
 
         GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addComponent(jSplitPane1, GroupLayout.DEFAULT_SIZE, 1109, Short.MAX_VALUE)
         );
-        layout.setVerticalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+        layout.setVerticalGroup(
+            layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addComponent(jSplitPane1)
         );
 
@@ -478,6 +526,7 @@ public class PaperTrackerWindow extends javax.swing.JFrame {
     public final JLabel jLabel3 = new JLabel();
     public final JLabel jLabel4 = new JLabel();
     public final JLabel jLabel5 = new JLabel();
+    public final JLabel jLabel6 = new JLabel();
     public final JLabel jLabel7 = new JLabel();
     public final JLabel jLabel8 = new JLabel();
     public final JLabel jLabel9 = new JLabel();
@@ -489,15 +538,19 @@ public class PaperTrackerWindow extends javax.swing.JFrame {
     public final JPanel jPanel3 = new JPanel();
     public final JPanel jPanel4 = new JPanel();
     public final JPanel jPanel5 = new JPanel();
+    public final JPanel jPanel6 = new JPanel();
     public final JScrollPane jScrollPane1 = new JScrollPane();
     public final JScrollPane jScrollPane2 = new JScrollPane();
     public final JScrollPane jScrollPane3 = new JScrollPane();
     public final JScrollPane jScrollPane4 = new JScrollPane();
     public final JScrollPane jScrollPane5 = new JScrollPane();
     public final JScrollPane jScrollPane6 = new JScrollPane();
+    public final JScrollPane jScrollPane7 = new JScrollPane();
     public final JSplitPane jSplitPane1 = new JSplitPane();
     public final JSplitPane jSplitPane2 = new JSplitPane();
     public final JSplitPane jSplitPane3 = new JSplitPane();
+    public final JSplitPane jSplitPane4 = new JSplitPane();
+    public final JTextArea notesIdeaBox = new JTextArea();
     public final JTextArea paperAbstractField = new JTextArea();
     public final JLabel paperAuthorLabel = new JLabel();
     public final JTextArea paperCommentsField = new JTextArea();
@@ -515,5 +568,3 @@ public class PaperTrackerWindow extends javax.swing.JFrame {
     public final JCheckBox seenCheckBox = new JCheckBox();
     // End of variables declaration                   
 }
-
-

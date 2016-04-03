@@ -14,14 +14,20 @@ public class IdeaConverter {
 		Attribute nameAttribute = new Attribute("name", idea.name);
 		ideaElement.addAttribute(nameAttribute);
 		
+		Element notesElement = new Element("notes");
+		notesElement.appendChild(idea.notes);
+		ideaElement.appendChild(notesElement);
+		
+		Element papersElement = new Element("papers");
 		for(Paper relevantPaper : idea.relevantPapers) {
 			Element paperElement = new Element("paper");
 			
 			Attribute titleAttribute = new Attribute("title", relevantPaper.title);
 			paperElement.addAttribute(titleAttribute);
 			
-			ideaElement.appendChild(paperElement);
+			papersElement.appendChild(paperElement);
 		}
+		ideaElement.appendChild(papersElement);
 		return ideaElement;
 	}
 
@@ -29,7 +35,9 @@ public class IdeaConverter {
 		String name = element.getAttributeValue("name");
 		
 		Idea idea = new Idea(name);
-		Elements paperElements = element.getChildElements();
+		Elements paperElements = element.getFirstChildElement("papers").getChildElements();
+		Element notesElement = element.getFirstChildElement("notes");
+		idea.notes = notesElement.getValue();
 		
 		for(int i = 0; i < paperElements.size(); i++) {
 			String paperTitle = paperElements.get(i).getAttributeValue("title");

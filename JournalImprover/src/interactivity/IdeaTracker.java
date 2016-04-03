@@ -10,6 +10,8 @@ import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
+import javax.swing.event.CaretEvent;
+import javax.swing.event.CaretListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
@@ -120,6 +122,20 @@ public class IdeaTracker implements EventHandler {
 			}
 		});
 		
+		window.notesIdeaBox.addCaretListener(new CaretListener() {
+
+			@Override
+			public void caretUpdate(CaretEvent arg0) {
+				Idea selectedIdea = getSelectedIdea();
+				if(selectedIdea == null) {
+					return;
+				}
+				selectedIdea.notes = window.notesIdeaBox.getText();
+				writeCache();
+			}
+			
+		});
+		
 		window.removeRelevantPaperButton.setEnabled(false);
 		window.removeRelevantPaperButton.addActionListener(new ActionListener() {
 			@Override
@@ -187,6 +203,7 @@ public class IdeaTracker implements EventHandler {
 				
 				relevantTableModel.setRowCount(0);
 				if(currentIdea != null) {
+					window.notesIdeaBox.setText(currentIdea.notes);
 					for(Paper paper : currentIdea.relevantPapers) {
 						relevantTableModel.addRow(new String[]{paper.publicationDate.toString(), paper.title});
 					}
