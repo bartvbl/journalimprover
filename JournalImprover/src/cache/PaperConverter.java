@@ -7,6 +7,7 @@ import lib.util.StringUtil;
 import nu.xom.Attribute;
 import nu.xom.Element;
 import nu.xom.Elements;
+import querying.DataSource;
 
 public class PaperConverter {
 	public static Element convertPaperToXML(Paper paper) {
@@ -21,6 +22,14 @@ public class PaperConverter {
 		Attribute volumeAttribute = new Attribute("volume", paper.volume);
 		Attribute pageAttribute = new Attribute("page", paper.page);
 		Attribute publisherAttribute = new Attribute("publisher", paper.publisher);
+		
+		Element originsElement = new Element("origins");
+		for(DataSource origin : paper.origins) {
+			Element originElement = new Element("origin");
+			originElement.appendChild(origin.name());
+		}
+		
+		paperElement.appendChild(originsElement);
 		
 		if(paper.DOI != null) {
 			Attribute doiAttribute = new Attribute("doi", paper.DOI);
@@ -75,7 +84,16 @@ public class PaperConverter {
 		String abstractText = abstractElement.getValue();
 		Author[] authors = parseAuthors(authorsElement);
 		
-		Paper paper = new Paper(title, subtitle, doi, authors, date, publisher, volume, page, abstractText);
+		Element originsElement = paperElement.getFirstChildElement("origins");
+		Elements originElements = originsElement.getChildElements();
+		DataSource[] sources = new DataSource[originElements.size()];
+		for(int i = 0; i < originElements.size(); i++) {
+			Element originElement = originElements.get(i);
+			DataSource source = DataSource.valueOf(originElement.getValue());
+			sources[i] = source;
+		}
+		
+		Paper paper = new Paper(sources, title, subtitle, doi, authors, date, publisher, volume, page, abstractText);
 		
 		paper.PDFURL = paperElement.getAttributeValue("pdfurl");
 		

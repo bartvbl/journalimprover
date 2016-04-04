@@ -1,6 +1,9 @@
 package data;
 
+import java.util.ArrayList;
+
 import lib.util.StringUtil;
+import querying.DataSource;
 
 public class Paper {
 
@@ -14,8 +17,9 @@ public class Paper {
 	public String page;
 	public String PDFURL = null;
 	public final String DOI;
+	public final ArrayList<DataSource> origins;
 
-	public Paper(String title, String subtitle, String doi, Author[] authors, Date publicationDate, String publisher, String volume, String page, String abstractText) {
+	public Paper(DataSource origin, String title, String subtitle, String doi, Author[] authors, Date publicationDate, String publisher, String volume, String page, String abstractText) {
 		this.title = title;
 		this.subtitle = subtitle;
 		this.publicationDate = publicationDate;
@@ -25,6 +29,26 @@ public class Paper {
 		this.page = page;
 		this.authors = authors;
 		this.abstractText = abstractText;
+		
+		this.origins = new ArrayList<DataSource>();
+		this.origins.add(origin);
+	}
+
+	public Paper(DataSource[] sources, String title, String subtitle, String doi, Author[] authors, Date publicationDate, String publisher, String volume, String page, String abstractText) {
+		this.title = title;
+		this.subtitle = subtitle;
+		this.publicationDate = publicationDate;
+		this.publisher = publisher;
+		this.DOI = doi;
+		this.volume = volume;
+		this.page = page;
+		this.authors = authors;
+		this.abstractText = abstractText;
+		
+		this.origins = new ArrayList<DataSource>();
+		for(DataSource origin : sources) {
+			origins.add(origin);
+		}
 	}
 
 	@Override
@@ -81,32 +105,39 @@ public class Paper {
 				(this.publicationDate.year != 0 ? 1 : 0);
 		if(newNumDefinedDateFields > currentNumDefinedDateFields) {
 			this.publicationDate = paper.publicationDate;
+			this.origins.addAll(paper.origins);
 		}
 		
 		if(this.authors.length == 0 && paper.authors.length > 0) {
 			this.authors = paper.authors;
+			this.origins.addAll(paper.origins);
 		}
 		
 		if(this.abstractText.equals("") && !paper.abstractText.equals("")) {
 			System.out.println("Found an abstract for " + paper.title + ".");
 			this.abstractText = paper.abstractText;
+			this.origins.addAll(paper.origins);
 		}
 
 		if(this.publisher.equals("") && !paper.publisher.equals("")) {
 			this.publisher = paper.publisher;
+			this.origins.addAll(paper.origins);
 		}
 
 		if(this.volume.equals("") && !paper.volume.equals("")) {
 			this.volume = paper.volume;
+			this.origins.addAll(paper.origins);
 		}
 
 		if(this.page.equals("") && !paper.page.equals("")) {
 			this.page = paper.page;
+			this.origins.addAll(paper.origins);
 		}	
 
 		
 		if((this.PDFURL == null || this.PDFURL.equals("")) && (paper.PDFURL != null && !paper.PDFURL.equals(""))) {
 			this.PDFURL = paper.PDFURL;
+			this.origins.addAll(paper.origins);
 		}
 	}
 }

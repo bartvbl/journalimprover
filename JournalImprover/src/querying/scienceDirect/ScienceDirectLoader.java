@@ -18,6 +18,7 @@ import nu.xom.Element;
 import nu.xom.Elements;
 import nu.xom.ParsingException;
 import nu.xom.ValidityException;
+import querying.DataSource;
 
 public class ScienceDirectLoader {
 
@@ -112,7 +113,7 @@ public class ScienceDirectLoader {
 			// pii - unsupported
 			Author[] authors = hasChild(entry, "authors", "Atom") ? parseAuthors(entry.getFirstChildElement("authors", URIMap.get("Atom"))) : new Author[0];
 			
-			Paper paper = new Paper(title, "", DOI, authors, publicationDate, publisher, volume, pages, abstractText);
+			Paper paper = new Paper(DataSource.ScienceDirect, title, "", DOI, authors, publicationDate, publisher, volume, pages, abstractText);
 			
 			return paper;
 		} catch(Exception e) {

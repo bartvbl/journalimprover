@@ -16,6 +16,7 @@ import nu.xom.Element;
 import nu.xom.Elements;
 import nu.xom.ParsingException;
 import nu.xom.ValidityException;
+import querying.DataSource;
 
 public class IEEEXPloreLoader {
 
@@ -87,7 +88,7 @@ public class IEEEXPloreLoader {
 		int arnumber = Integer.parseInt(entry.getFirstChildElement("arnumber").getValue());
 		String DOI = entry.getFirstChildElement("doi") != null ? entry.getFirstChildElement("doi").getValue() : "";
 		int publicationID = Integer.parseInt(entry.getFirstChildElement("publicationId").getValue());
-		int partnum = entry.getFirstChildElement("partnum") != null ? Integer.parseInt(entry.getFirstChildElement("partnum").getValue()) : -1;
+		String partnum = entry.getFirstChildElement("partnum") != null ? entry.getFirstChildElement("partnum").getValue() : "";
 		String mdurl = entry.getFirstChildElement("mdurl").getValue();
 		String pdfURL = entry.getFirstChildElement("pdf").getValue();
 		
@@ -95,7 +96,7 @@ public class IEEEXPloreLoader {
 			title = pubtitle;
 		}
 		
-		Paper paper = new Paper(title, "", DOI, authors, publicationYear, publisher, volume, pages, abstractText);
+		Paper paper = new Paper(DataSource.IEEEXplore, title, "", DOI, authors, publicationYear, publisher, volume, pages, abstractText);
 		
 		paper.setPDFURL(pdfURL);
 		

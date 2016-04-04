@@ -10,6 +10,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import lib.util.HTTPRequester;
+import querying.DataSource;
 import data.Author;
 import data.Date;
 import data.Paper;
@@ -24,7 +25,7 @@ public class CrossRefLoader {
 		Paper[] foundPapers = new Paper[0];
 		for(int i = 0; i < numRequests; i++) {
 			onlineSearchHandler.printStatusMessage("CrossRef: Request " + i + " of " + numRequests);
-			Paper[] result = query(query, i * papersPerRequest, papersPerRequest);
+			Paper[] result = performQuery(query, i * papersPerRequest, papersPerRequest);
 			Paper[] newPaperArray = new Paper[foundPapers.length + result.length];
 			System.arraycopy(foundPapers, 0, newPaperArray, 0, foundPapers.length);
 			System.arraycopy(result, 0, newPaperArray, foundPapers.length, result.length);
@@ -39,7 +40,7 @@ public class CrossRefLoader {
 		return foundPapers;
 	}
 	
-	private static Paper[] query(String query, int start, int count) throws IOException {
+	private static Paper[] performQuery(String query, int start, int count) throws IOException {
 		HashSet<String> entryMap = new HashSet<String>();
 		String result = HTTPRequester.request(baseURL + "works?rows=" + count + "&offset=" + start + "&query=" + query.replace(' ', '+'));
 		JSONObject response = new JSONObject(result);
@@ -97,7 +98,7 @@ public class CrossRefLoader {
 				title = container_title + ", page(s) " + page;
 			}
 			
-			Paper paper = new Paper(title, subtitle, DOI, authors, created, publisher, volume, page, "");
+			Paper paper = new Paper(DataSource.CrossRef, title, subtitle, DOI, authors, created, publisher, volume, page, "");
 			return paper;
 		} catch(JSONException e) {
 			e.printStackTrace();

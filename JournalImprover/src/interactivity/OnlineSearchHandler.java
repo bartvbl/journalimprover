@@ -5,15 +5,20 @@ import gui.PaperImportWindow;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
+import java.util.Arrays;
 
 import lib.events.Event;
 import lib.events.EventDispatcher;
 import lib.events.EventType;
 import lib.util.WorkerThread;
 import nu.xom.ParsingException;
+import querying.DataSource;
 import querying.crossref.CrossRefLoader;
 import querying.ieeexplore.IEEEXPloreLoader;
 import querying.scienceDirect.ScienceDirectLoader;
+import querying.scopus.ScopusLoader;
 import querying.springer.SpringerLoader;
 import data.Paper;
 
@@ -33,7 +38,7 @@ public class OnlineSearchHandler implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		window.searchButton.setEnabled(false);
 		window.searchPapersField.setEnabled(false);
-		
+
 		WorkerThread.enqueue(new Runnable() {
 			@Override
 			public void run() {
@@ -44,42 +49,28 @@ public class OnlineSearchHandler implements ActionListener {
 
 	protected void performQuerying() {
 		String query = window.searchPapersField.getText();
-		
-		try {
-			printStatusMessage("CrossRef: Querying..");
-			Paper[] crossRefPapers = CrossRefLoader.query(query, this);
-			printStatusMessage("CrossRef returned " + crossRefPapers.length + " papers.");
-			eventDispatcher.dispatchEvent(new Event<Paper[]>(EventType.IMPORT_PAPERS, crossRefPapers));
-			printStatusMessage("CrossRef papers imported.");
-			
-			printStatusMessage("IEEEXPlore: Querying..");
-			Paper[] ieeexplorePapers = IEEEXPloreLoader.query(query, this);
-			printStatusMessage("IEEEXPlore: returned " + ieeexplorePapers.length + " papers.");
-			eventDispatcher.dispatchEvent(new Event<Paper[]>(EventType.IMPORT_PAPERS, ieeexplorePapers));
-			printStatusMessage("IEEEXplore: papers imported.");
-			
-			printStatusMessage("ScienceDirect: Querying..");
-			Paper[] scienceDirectPapers = ScienceDirectLoader.query(query, this);
-			printStatusMessage("ScienceDirect: returned " + scienceDirectPapers.length + " papers.");
-			eventDispatcher.dispatchEvent(new Event<Paper[]>(EventType.IMPORT_PAPERS, scienceDirectPapers));
-			printStatusMessage("ScienceDirect: papers imported.");
-			
-			printStatusMessage("Scopus: Querying..");
-			Paper[] scopusPapers = ScienceDirectLoader.query(query, this);
-			printStatusMessage("Scopus: returned " + scopusPapers.length + " papers.");
-			eventDispatcher.dispatchEvent(new Event<Paper[]>(EventType.IMPORT_PAPERS, scopusPapers));
-			printStatusMessage("Scopus: papers imported.");
-			
-			
-			printStatusMessage("Springer: Querying..");
-			Paper[] springerPapers = SpringerLoader.query(query, this);
-			printStatusMessage("Springer: returned " + springerPapers.length + " papers.");
-			eventDispatcher.dispatchEvent(new Event<Paper[]>(EventType.IMPORT_PAPERS, springerPapers));
-			printStatusMessage("Springer: papers imported.");
-		} catch (IOException | ParsingException e1) {
-			e1.printStackTrace();
+
+		for(DataSource source : DataSource.values()) {
+			try {
+				printStatusMessage(source.name() + ": Querying..");
+				Method[] methods = source.loaderClass.getMethods();
+				for(Method method : methods) {
+					if(method.getName().equals("query")) {
+						Parameter[] parameters = method.getParameters();
+						Paper[] crossRefPapers = (Paper[]) method.invoke(null, new Object[]{query, this});
+						printStatusMessage(source.name() + " returned " + crossRefPapers.length + " papers.");
+						eventDispatcher.dispatchEvent(new Event<Paper[]>(EventType.IMPORT_PAPERS, crossRefPapers));
+						printStatusMessage(source.name() + " papers imported.");				
+						break;
+					}
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				printStatusMessage("Failed to load from " + source.name());
+				throw new RuntimeException("Failed to load from source " + source, e);
+			}
 		}
-		
+
 		window.searchButton.setEnabled(true);
 		window.searchPapersField.setEnabled(true);
 	}
@@ -92,7 +83,7 @@ public class OnlineSearchHandler implements ActionListener {
 
 	public void setProgress(double progress) {
 		window.progressBar.setValue((int) (progress * 100.0));
-		
+
 	}
 
 }

@@ -11,6 +11,7 @@ import org.json.JSONObject;
 
 import lib.util.Config;
 import lib.util.HTTPRequester;
+import querying.DataSource;
 import data.Author;
 import data.Date;
 import data.Paper;
@@ -88,7 +89,7 @@ public class SpringerLoader {
 			// genre - unsupported
 			String abstractText = entry.getString("abstract");
 			
-			Paper paper = new Paper(title, "", DOI, authors, publicationDate, publisher, volume, page, abstractText);
+			Paper paper = new Paper(DataSource.Springer, title, "", DOI, authors, publicationDate, publisher, volume, page, abstractText);
 			return paper;
 		} catch(JSONException e) {
 			e.printStackTrace();
