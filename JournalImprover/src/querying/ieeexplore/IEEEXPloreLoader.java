@@ -27,7 +27,7 @@ public class IEEEXPloreLoader {
 	public static Paper[] query(String query, OnlineSearchHandler onlineSearchHandler) throws IOException, ValidityException, ParsingException {
 		Paper[] foundPapers = new Paper[0];
 		for(int i = 0; i < numRequests; i++) {
-			onlineSearchHandler.printStatusMessage("IEEEXPlore: Request " + i + " of " + numRequests);
+			onlineSearchHandler.printStatusMessage("IEEEXPlore: Request " + (i+1) + " of " + numRequests);
 			
 			// Sequence number is 1-indexed
 			String url = baseURL + "queryText=" + query + "&hc=" + papersPerRequest + "&rs=" + ((i * papersPerRequest) + 1);

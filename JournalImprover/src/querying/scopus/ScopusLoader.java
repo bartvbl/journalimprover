@@ -37,7 +37,7 @@ public class ScopusLoader {
 	public static Paper[] query(String query, OnlineSearchHandler onlineSearchHandler) throws IOException, ValidityException, ParsingException {
 		Paper[] foundPapers = new Paper[0];
 		for(int i = 0; i < numRequests; i++) {
-			onlineSearchHandler.printStatusMessage("Scopus: Request " + i + " of " + numRequests);
+			onlineSearchHandler.printStatusMessage("Scopus: Request " + (i+1) + " of " + numRequests);
 			
 			// Sequence number is 1-indexed
 			String url = baseURL + "?" +

@@ -25,7 +25,7 @@ public class SpringerLoader {
 	public static Paper[] query(String query, OnlineSearchHandler onlineSearchHandler) throws IOException {
 		Paper[] foundPapers = new Paper[0];
 		for(int i = 0; i < numRequests; i++) {
-			onlineSearchHandler.printStatusMessage("Springer: Request " + i + " of " + numRequests);
+			onlineSearchHandler.printStatusMessage("Springer: Request " + (i+1) + " of " + numRequests);
 			Paper[] result = query(query, i * papersPerRequest, papersPerRequest);
 			Paper[] newPaperArray = new Paper[foundPapers.length + result.length];
 			System.arraycopy(foundPapers, 0, newPaperArray, 0, foundPapers.length);

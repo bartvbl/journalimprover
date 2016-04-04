@@ -98,6 +98,7 @@ public class Paper {
 	}
 
 	public void update(Paper paper) {
+		boolean wasChanged = false;
 		int newNumDefinedDateFields = 
 				(paper.publicationDate.day != 0 ? 1 : 0) +
 				(paper.publicationDate.month != 0 ? 1 : 0) +
@@ -108,39 +109,44 @@ public class Paper {
 				(this.publicationDate.year != 0 ? 1 : 0);
 		if(newNumDefinedDateFields > currentNumDefinedDateFields) {
 			this.publicationDate = paper.publicationDate;
-			this.origins.addAll(paper.origins);
+			wasChanged = true;
 		}
 		
 		if(this.authors.length == 0 && paper.authors.length > 0) {
 			this.authors = paper.authors;
-			this.origins.addAll(paper.origins);
+			wasChanged = true;
 		}
 		
 		if(this.abstractText.equals("") && !paper.abstractText.equals("")) {
-			System.out.println("Found an abstract for " + paper.title + ".");
 			this.abstractText = paper.abstractText;
-			this.origins.addAll(paper.origins);
+			wasChanged = true;
 		}
 
 		if(this.publisher.equals("") && !paper.publisher.equals("")) {
 			this.publisher = paper.publisher;
-			this.origins.addAll(paper.origins);
+			wasChanged = true;
 		}
 
 		if(this.volume.equals("") && !paper.volume.equals("")) {
 			this.volume = paper.volume;
-			this.origins.addAll(paper.origins);
+			wasChanged = true;
 		}
 
 		if(this.page.equals("") && !paper.page.equals("")) {
 			this.page = paper.page;
-			this.origins.addAll(paper.origins);
+			wasChanged = true;
 		}	
-
 		
 		if((this.PDFURL == null || this.PDFURL.equals("")) && (paper.PDFURL != null && !paper.PDFURL.equals(""))) {
 			this.PDFURL = paper.PDFURL;
-			this.origins.addAll(paper.origins);
+			wasChanged = true;
+		}
+		if(wasChanged) {
+			for(DataSource origin : paper.origins) {
+				if(!this.origins.contains(origin)) {
+					this.origins.add(origin);					
+				}
+			}
 		}
 	}
 }
