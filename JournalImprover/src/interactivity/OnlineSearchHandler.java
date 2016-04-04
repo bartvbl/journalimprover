@@ -56,7 +56,6 @@ public class OnlineSearchHandler implements ActionListener {
 				Method[] methods = source.loaderClass.getMethods();
 				for(Method method : methods) {
 					if(method.getName().equals("query")) {
-						Parameter[] parameters = method.getParameters();
 						Paper[] crossRefPapers = (Paper[]) method.invoke(null, new Object[]{query, this});
 						printStatusMessage(source.name() + " returned " + crossRefPapers.length + " papers.");
 						eventDispatcher.dispatchEvent(new Event<Paper[]>(EventType.IMPORT_PAPERS, crossRefPapers));

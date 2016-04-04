@@ -81,6 +81,9 @@ public class Paper {
 	}
 
 	public String createAuthorString() {
+		if(authors.length == 0) {
+			return "unknown author(s)";
+		}
 		String affiliationString = (authors[0].affiliation.length > 0 && !authors[0].affiliation[0].equals("") ? " (" + StringUtil.createCommaSeparatedList(authors[0].affiliation) + ")" : "");
 		String authorString = authors[0].firstName + " " + authors[0].lastName + affiliationString + "\n";
 		for(int i = 1; i < authors.length; i++) {

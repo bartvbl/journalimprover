@@ -1,5 +1,7 @@
 package cache;
 
+import java.util.Arrays;
+
 import data.Author;
 import data.Date;
 import data.Paper;
@@ -24,9 +26,11 @@ public class PaperConverter {
 		Attribute publisherAttribute = new Attribute("publisher", paper.publisher);
 		
 		Element originsElement = new Element("origins");
+		System.out.println(paper.origins);
 		for(DataSource origin : paper.origins) {
 			Element originElement = new Element("origin");
 			originElement.appendChild(origin.name());
+			originsElement.appendChild(originElement);
 		}
 		
 		paperElement.appendChild(originsElement);
@@ -92,7 +96,6 @@ public class PaperConverter {
 			DataSource source = DataSource.valueOf(originElement.getValue());
 			sources[i] = source;
 		}
-		
 		Paper paper = new Paper(sources, title, subtitle, doi, authors, date, publisher, volume, page, abstractText);
 		
 		paper.PDFURL = paperElement.getAttributeValue("pdfurl");
