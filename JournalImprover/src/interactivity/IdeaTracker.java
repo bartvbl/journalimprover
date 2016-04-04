@@ -205,7 +205,7 @@ public class IdeaTracker implements EventHandler {
 				if(currentIdea != null) {
 					window.notesIdeaBox.setText(currentIdea.notes);
 					for(Paper paper : currentIdea.relevantPapers) {
-						relevantTableModel.addRow(new String[]{paper.publicationDate.toString(), paper.title});
+						relevantTableModel.addRow(new String[]{paper.publicationDate.toPrettyString(), paper.title});
 					}
 				}
 			}

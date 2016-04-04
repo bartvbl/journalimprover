@@ -24,6 +24,6 @@ public class Date {
 	}
 
 	public String toPrettyString() {
-		return toString();
+		return year + "-" + (month < 10 ? "0" + month : month) + "-" + (day < 10 ? "0" + day : day);
 	}
 }
