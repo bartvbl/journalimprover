@@ -112,7 +112,7 @@ public class ScienceDirectLoader {
 			// pii - unsupported
 			Author[] authors = hasChild(entry, "authors", "Atom") ? parseAuthors(entry.getFirstChildElement("authors", URIMap.get("Atom"))) : new Author[0];
 			
-			Paper paper = new Paper(title, "", authors, publicationDate, publisher, volume, pages, abstractText);
+			Paper paper = new Paper(title, "", DOI, authors, publicationDate, publisher, volume, pages, abstractText);
 			
 			return paper;
 		} catch(Exception e) {

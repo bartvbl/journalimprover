@@ -95,7 +95,7 @@ public class IEEEXPloreLoader {
 			title = pubtitle;
 		}
 		
-		Paper paper = new Paper(title, "", authors, publicationYear, publisher, volume, pages, abstractText);
+		Paper paper = new Paper(title, "", DOI, authors, publicationYear, publisher, volume, pages, abstractText);
 		
 		paper.setPDFURL(pdfURL);
 		

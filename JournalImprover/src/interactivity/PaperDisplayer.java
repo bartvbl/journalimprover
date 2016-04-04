@@ -13,7 +13,7 @@ public class PaperDisplayer implements EventHandler {
 
 	private final PaperTrackerWindow window;
 	private final EventDispatcher eventDispatcher;
-	private Paper currentSelectedPaper = new Paper("", "", new Author[]{new Author("", "", new String[0])}, new Date(0, 0, 0), "", "", "", "");
+	private Paper currentSelectedPaper = new Paper("", "", null, new Author[]{new Author("", "", new String[0])}, new Date(0, 0, 0), "", "", "", "");
 
 	public PaperDisplayer(PaperTrackerWindow window, EventDispatcher mainDispatcher) {
 		this.window = window;

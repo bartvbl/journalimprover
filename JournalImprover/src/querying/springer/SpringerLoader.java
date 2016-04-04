@@ -88,7 +88,7 @@ public class SpringerLoader {
 			// genre - unsupported
 			String abstractText = entry.getString("abstract");
 			
-			Paper paper = new Paper(title, "", authors, publicationDate, publisher, volume, page, abstractText);
+			Paper paper = new Paper(title, "", DOI, authors, publicationDate, publisher, volume, page, abstractText);
 			return paper;
 		} catch(JSONException e) {
 			e.printStackTrace();

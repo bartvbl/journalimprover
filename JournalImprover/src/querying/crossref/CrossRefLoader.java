@@ -97,7 +97,7 @@ public class CrossRefLoader {
 				title = container_title + ", page(s) " + page;
 			}
 			
-			Paper paper = new Paper(title, subtitle, authors, created, publisher, volume, page, "");
+			Paper paper = new Paper(title, subtitle, DOI, authors, created, publisher, volume, page, "");
 			return paper;
 		} catch(JSONException e) {
 			e.printStackTrace();

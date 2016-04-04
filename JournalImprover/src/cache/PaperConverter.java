@@ -22,6 +22,11 @@ public class PaperConverter {
 		Attribute pageAttribute = new Attribute("page", paper.page);
 		Attribute publisherAttribute = new Attribute("publisher", paper.publisher);
 		
+		if(paper.DOI != null) {
+			Attribute doiAttribute = new Attribute("doi", paper.DOI);
+			paperElement.addAttribute(doiAttribute);
+		}
+		
 		if(paper.PDFURL != null) {
 			Attribute pdfAttribute = new Attribute("pdfurl", paper.PDFURL);
 			paperElement.addAttribute(pdfAttribute);
@@ -65,11 +70,12 @@ public class PaperConverter {
 		String volume = paperElement.getAttributeValue("volume");
 		String page = paperElement.getAttributeValue("page");
 		String publisher = paperElement.getAttributeValue("publisher");
+		String doi = paperElement.getAttributeValue("doi");
 		
 		String abstractText = abstractElement.getValue();
 		Author[] authors = parseAuthors(authorsElement);
 		
-		Paper paper = new Paper(title, subtitle, authors, date, publisher, volume, page, abstractText);
+		Paper paper = new Paper(title, subtitle, doi, authors, date, publisher, volume, page, abstractText);
 		
 		paper.PDFURL = paperElement.getAttributeValue("pdfurl");
 		

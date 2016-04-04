@@ -13,12 +13,14 @@ public class Paper {
 	public String volume;
 	public String page;
 	public String PDFURL = null;
+	public final String DOI;
 
-	public Paper(String title, String subtitle, Author[] authors, Date publicationDate, String publisher, String volume, String page, String abstractText) {
+	public Paper(String title, String subtitle, String doi, Author[] authors, Date publicationDate, String publisher, String volume, String page, String abstractText) {
 		this.title = title;
 		this.subtitle = subtitle;
 		this.publicationDate = publicationDate;
 		this.publisher = publisher;
+		this.DOI = doi;
 		this.volume = volume;
 		this.page = page;
 		this.authors = authors;
@@ -31,7 +33,13 @@ public class Paper {
 			return false;
 		}
 		Paper otherPaper = (Paper) other;
-		return otherPaper.title.equals(title);
+		if(otherPaper.DOI != null && otherPaper.DOI.equals(DOI)) {
+			return true;
+		}
+		if((otherPaper.DOI == null || this.DOI != null) && (otherPaper.title.equals(this.title))) {
+			return true;
+		}
+		return false;
 	}
 	
 	@Override
