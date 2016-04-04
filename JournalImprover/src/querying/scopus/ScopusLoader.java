@@ -23,8 +23,8 @@ import querying.DataSource;
 public class ScopusLoader {
 
 	private static final String baseURL = "http://api.elsevier.com/content/search/scopus";
-	private static final int papersPerRequest = 200;
-	private static final int numRequests = 15;
+	private static final int papersPerRequest = 100;
+	private static final int numRequests = 30;
 	
 	private static final HashMap<String, String> URIMap = new HashMap<String, String>();
 	
@@ -89,7 +89,7 @@ public class ScopusLoader {
 			// dc:identifier - unsupported
 			// eid - unsupported
 			// prism:url - unsupported
-			String title = entry.getFirstChildElement("title", URIMap.get("dc")).getValue();
+			String title = getEntryValue(entry, "title", "dc", "[untitled]");
 			// dc:creator - unsupported
 			String abstractText = getEntryValue(entry, "description", "dc", "");
 			// prism:publicationName - unsupported

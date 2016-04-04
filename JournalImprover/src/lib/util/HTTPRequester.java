@@ -15,12 +15,16 @@ public class HTTPRequester {
 	public static String request(String address) throws IOException {
 		System.setProperty("http.keepAlive", "false");
 		URL url = new URL(address);
-		URLConnection connection = url.openConnection();
+		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 		connection.setRequestProperty("Connection", "close");
 		return readConnectionResponse(connection);
 	}
 
-	private static String readConnectionResponse(URLConnection connection) throws IOException {
+	private static String readConnectionResponse(HttpURLConnection connection) throws IOException {
+		int responseCode = connection.getResponseCode();
+		if(responseCode == 400) {
+			System.out.println("HTTP Error: " + connection.getResponseMessage());
+		}
 		BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 		StringBuffer buffer = new StringBuffer();
 		String line;

@@ -67,7 +67,6 @@ public class OnlineSearchHandler implements ActionListener {
 			} catch (Exception e) {
 				e.printStackTrace();
 				printStatusMessage("Failed to load from " + source.name());
-				throw new RuntimeException("Failed to load from source " + source, e);
 			}
 		}
 
