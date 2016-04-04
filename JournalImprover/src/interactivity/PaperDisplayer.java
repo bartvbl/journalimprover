@@ -26,6 +26,7 @@ public class PaperDisplayer implements EventHandler {
 		
 		window.paperAbstractField.setEditable(false);
 		window.paperAbstractField.setLineWrap(true);
+		window.paperAbstractField.setWrapStyleWord(true);
 		
 		updateWindow();
 	}

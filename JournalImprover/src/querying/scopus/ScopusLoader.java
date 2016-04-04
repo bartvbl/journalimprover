@@ -114,6 +114,11 @@ public class ScopusLoader {
 			Author[] authors = hasChild(entry, "authors", "Atom") ? parseAuthors(entry.getFirstChildElement("authors", URIMap.get("Atom"))) : new Author[0];
 			
 			Paper paper = new Paper(DataSource.Scopus, title, "", DOI, authors, publicationDate, publisher, volume, pages, abstractText);
+
+			String fullTextURL = findFullTextURL(entry);
+			if(!fullTextURL.equals("")) {
+				paper.setPDFURL(fullTextURL);
+			}
 			
 			return paper;
 		} catch(Exception e) {
@@ -127,6 +132,19 @@ public class ScopusLoader {
 		}
 	}
 	
+	private static String findFullTextURL(Element entry) {
+		Elements childElements = entry.getChildElements();
+		for(int i = 0; i < childElements.size(); i++) {
+			Element childElement = childElements.get(i);
+			if(childElement.getLocalName().equals("link")) {
+				if(childElement.getAttributeValue("ref").equals("full-text")) {
+					return childElement.getAttributeValue("href");
+				}
+			}
+		}
+		return "";
+	}
+
 	private static boolean hasChild(Element entry, String name, String URIName) {
 		Element foundElement = entry.getFirstChildElement(name, URIMap.get(URIName));
 		return foundElement != null;

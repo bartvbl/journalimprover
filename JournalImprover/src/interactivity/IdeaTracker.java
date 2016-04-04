@@ -122,6 +122,7 @@ public class IdeaTracker implements EventHandler {
 			}
 		});
 		
+		window.notesIdeaBox.setWrapStyleWord(true);
 		window.notesIdeaBox.addCaretListener(new CaretListener() {
 
 			@Override
