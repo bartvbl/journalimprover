@@ -5,7 +5,10 @@ import java.util.Collection;
 
 import javax.swing.SwingUtilities;
 
+import backend.Backend;
+import data.Comment;
 import data.Paper;
+import data.Rating;
 import gui.PaperTrackerWindow;
 import interactivity.PaperTrackerTableModel;
 import lib.events.Event;
@@ -18,11 +21,13 @@ final class PaperUpdater implements Runnable {
 	private final PaperTrackerTableModel paperTableModel;
 	private final Collection<Paper> papers;
 	private final EventDispatcher eventDispatcher;
+	private final Backend backend;
 
-	public PaperUpdater(PaperTrackerWindow window, PaperTrackerTableModel paperTableModel, Collection<Paper> papers, EventDispatcher eventDispatcher) {
+	public PaperUpdater(PaperTrackerWindow window, Backend backend, PaperTrackerTableModel paperTableModel, EventDispatcher eventDispatcher) {
 		this.window = window;
+		this.backend = backend;
 		this.paperTableModel = paperTableModel;
-		this.papers = papers;
+		this.papers = backend.papers.getAllPapers();
 		this.eventDispatcher = eventDispatcher;
 	}
 
@@ -36,7 +41,9 @@ final class PaperUpdater implements Runnable {
 				paperTableModel.setRowCount(0);
 				
 				for(Paper paper : relevantPapers) {
-					paperTableModel.addRow(new String[]{paper.publicationDate.toPrettyString(), paper.title});
+					Comment comment = backend.comments.getCommentByPaperTitle(paper.title);
+					String rating = comment != null ? comment.rating.displayName : Rating.None.displayName;
+					paperTableModel.addRow(new String[]{paper.publicationDate.toPrettyString(), rating, paper.title});
 				}
 				window.revalidate();
 			}

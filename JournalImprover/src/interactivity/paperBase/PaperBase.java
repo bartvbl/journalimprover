@@ -50,7 +50,7 @@ public class PaperBase implements ActionListener, CaretListener, EventHandler, L
 		this.paperTableSelectionModel = new DefaultListSelectionModel();
 		
 		paperTableModel.setColumnCount(2);
-		paperTableModel.setColumnIdentifiers(new String[]{"Date", "Title"});
+		paperTableModel.setColumnIdentifiers(new String[]{"Date", "Rating", "Title"});
 		
 		paperTableSelectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		paperTableSelectionModel.addListSelectionListener(this);
@@ -104,7 +104,7 @@ public class PaperBase implements ActionListener, CaretListener, EventHandler, L
 	}
 
 	private void updatePaperList() {
-		WorkerThread.enqueue(new PaperUpdater(this.window, this.paperTableModel, backend.papers.getAllPapers(), eventDispatcher));
+		WorkerThread.enqueue(new PaperUpdater(this.window, this.backend, this.paperTableModel, eventDispatcher));
 	}
 
 	@Override
