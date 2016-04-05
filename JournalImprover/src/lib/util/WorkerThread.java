@@ -2,12 +2,24 @@ package lib.util;
 
 public class WorkerThread extends Thread {
 	private final Queue<Runnable> workQueue = new Queue<Runnable>();
+
+	private final String threadName;
 	
-	private static final WorkerThread thread = new WorkerThread();
+	public static final WorkerThread backgroundIOThread = new WorkerThread("Background I/O");
+	public static final WorkerThread guiActivitiesThread = new WorkerThread("GUI activities");
+	public static final WorkerThread networkThread = new WorkerThread("Networking");
+	
 	static {
-		thread.start();
+		backgroundIOThread.start();
+		guiActivitiesThread.start();
+		networkThread.start();
 	}
 	
+	public WorkerThread(String name) {
+		super(name);
+		this.threadName = name;
+	}
+
 	public void run() {
 		while(true) {
 			if(!workQueue.isEmpty()) {
@@ -15,9 +27,7 @@ public class WorkerThread extends Thread {
 				synchronized(workQueue) {
 					task = workQueue.dequeue();
 				}
-				System.out.println("WorkerThread: I'm running " + task);
 				task.run();
-				System.out.println("WorkerThread: I've completed " + task);
 			} else {
 				try {
 					Thread.sleep(15);
@@ -28,9 +38,9 @@ public class WorkerThread extends Thread {
 		}
 	}
 
-	public static void enqueue(Runnable runnable) {
-		synchronized(thread.workQueue) {
-			thread.workQueue.enqueue(runnable);
+	public void enqueue(Runnable runnable) {
+		synchronized(workQueue) {
+			workQueue.enqueue(runnable);
 		}
 	}
 }

@@ -28,9 +28,9 @@ public class CommentsTracker implements EventHandler {
 	private final PaperTrackerWindow window;
 	private final EventDispatcher eventDispatcher;
 	private final Backend backend;
-	
+
 	private final DefaultComboBoxModel<String> ratingBoxModel;
-	
+
 	private Paper currentSelectedPaper = null;
 	private boolean isSwitchingPaper = false;
 
@@ -38,38 +38,41 @@ public class CommentsTracker implements EventHandler {
 		this.backend = backend;
 		this.window = window;
 		this.eventDispatcher = mainDispatcher;
-		
+
 		eventDispatcher.addEventListener(this, EventType.PAPER_SELECTED);
-		
+
 		this.ratingBoxModel = new DefaultComboBoxModel<String>();
-		
+
 		for(Rating rating : Rating.values()) {
 			ratingBoxModel.addElement(rating.displayName);
 		}
-		
+
 		window.ratingComboBox.setModel(ratingBoxModel);
-		
+
 		window.paperCommentsField.addCaretListener(new CaretListener() {
 			@Override
 			public void caretUpdate(CaretEvent arg0) {
 				updateCurrentComment();
 			}
 		});
-		
+
 		window.ratingComboBox.addItemListener(new ItemListener() {
 			@Override
 			public void itemStateChanged(ItemEvent arg0) {
 				updateCurrentComment();
+				if(!isSwitchingPaper) {
+					eventDispatcher.dispatchEvent(new Event<Object>(EventType.PAPER_BASE_UPDATE_PAPER_LIST));
+				}
 			}
 		});
-		
+
 		window.paperReadCheckbox.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				updateCurrentComment();
 			}
 		});
-		
+
 		window.seenCheckBox.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -77,7 +80,7 @@ public class CommentsTracker implements EventHandler {
 			}
 		});
 	}
-	
+
 	protected void updateCurrentComment() {
 		if(isSwitchingPaper) {
 			return;
@@ -91,7 +94,7 @@ public class CommentsTracker implements EventHandler {
 			comment.rating = Rating.fromIndex(window.ratingComboBox.getSelectedIndex());
 			comment.isRead = window.paperReadCheckbox.isSelected();
 			comment.isSeen = window.seenCheckBox.isSelected();
-			
+
 			backend.comments.writeCache();
 		}		
 	}
@@ -102,7 +105,7 @@ public class CommentsTracker implements EventHandler {
 			this.isSwitchingPaper = true;
 			Paper selectedPaper = (Paper) event.getEventParameterObject();
 			this.currentSelectedPaper = selectedPaper;
-			
+
 			Comment comment = backend.comments.getCommentByPaperTitle(selectedPaper.title);
 			if(comment != null) {
 				window.paperCommentsField.setText(comment.comments);
@@ -114,7 +117,7 @@ public class CommentsTracker implements EventHandler {
 				window.ratingComboBox.setSelectedIndex(0);
 				window.paperReadCheckbox.setSelected(false);
 				window.seenCheckBox.setSelected(false);
-				
+
 				Comment newComment = new Comment();
 				backend.comments.addCommentByPaperTitle(selectedPaper.title, newComment);
 			}

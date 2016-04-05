@@ -3,6 +3,7 @@ package interactivity.paperBase;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import javax.swing.DefaultListSelectionModel;
 import javax.swing.SwingUtilities;
 
 import backend.Backend;
@@ -35,16 +36,29 @@ final class PaperUpdater implements Runnable {
 		String searchQuery = window.searchPapersField.getText();
 		Paper[] relevantPapers = filter(searchQuery);
 		eventDispatcher.dispatchEvent(new Event<Paper[]>(EventType.PAPER_BASE_PAPERS_FILTERED, relevantPapers));
+		boolean rowCountChanged = relevantPapers.length != paperTableModel.getRowCount();
 		
 		SwingUtilities.invokeLater(new Runnable(){
 			public void run() {
-				paperTableModel.setRowCount(0);
+				if(rowCountChanged) {
+					paperTableModel.setRowCount(0);
+				}
 				
-				for(Paper paper : relevantPapers) {
+				for(int row = 0; row < relevantPapers.length; row++) {
+					Paper paper = relevantPapers[row];
 					Comment comment = backend.comments.getCommentByPaperTitle(paper.title);
 					String rating = comment != null ? comment.rating.displayName : Rating.None.displayName;
-					paperTableModel.addRow(new String[]{paper.publicationDate.toPrettyString(), rating, paper.title});
+					if(!rowCountChanged) {
+						paperTableModel.setValueAt(paper.publicationDate.toPrettyString(), row, 0);
+						paperTableModel.setValueAt(rating, row, 1);
+						paperTableModel.setValueAt(paper.title, row, 2);
+					} else {
+						paperTableModel.addRow(new String[]{paper.publicationDate.toPrettyString(), rating, paper.title});
+					}
 				}
+				
+				eventDispatcher.dispatchEvent(new Event<Object>(EventType.PAPER_BASE_PAPER_UPDATE_COMPLETE));
+				
 				window.revalidate();
 			}
 		});

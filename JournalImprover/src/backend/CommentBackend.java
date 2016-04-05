@@ -17,7 +17,7 @@ public class CommentBackend {
 	}
 
 	public void writeCache() {
-		WorkerThread.enqueue(new Runnable() {
+		WorkerThread.backgroundIOThread.enqueue(new Runnable() {
 			@Override
 			public void run() {
 				CommentCache.write(commentMap);

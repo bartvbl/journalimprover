@@ -39,7 +39,7 @@ public class OnlineSearchHandler implements ActionListener {
 		window.searchButton.setEnabled(false);
 		window.searchPapersField.setEnabled(false);
 
-		WorkerThread.enqueue(new Runnable() {
+		WorkerThread.networkThread.enqueue(new Runnable() {
 			@Override
 			public void run() {
 				performQuerying();

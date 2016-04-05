@@ -2,6 +2,8 @@ package interactivity.paperBase;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -29,17 +31,20 @@ import lib.events.EventHandler;
 import lib.events.EventType;
 import lib.util.WorkerThread;
 
-public class PaperBase implements ActionListener, CaretListener, EventHandler, ListSelectionListener {
+public class PaperBase implements ActionListener, EventHandler, ListSelectionListener {
 
 	private final PaperTrackerWindow window;
 	private final EventDispatcher eventDispatcher;
 	private final Backend backend;
+	
+	private boolean isUpdatingPapers = false;
 	
 	private final PaperTrackerTableModel paperTableModel;
 	
 	private final DefaultListSelectionModel paperTableSelectionModel;
 	
 	private Paper[] currentDisplayedPapers = new Paper[0];
+	private Paper currentSelectedPaper = null;
 
 	public PaperBase(Backend backend, PaperTrackerWindow window, EventDispatcher mainDispatcher) {
 		this.window = window;
@@ -61,11 +66,28 @@ public class PaperBase implements ActionListener, CaretListener, EventHandler, L
 		window.paperTable.setDragEnabled(false);
 		window.paperTable.setRowSorter(new TableRowSorter<PaperTrackerTableModel>(paperTableModel));
 		
-		window.searchPapersField.addCaretListener(this);
+		window.searchPapersField.addKeyListener(new KeyListener() {
+
+			@Override
+			public void keyPressed(KeyEvent arg0) {}
+
+			@Override
+			public void keyReleased(KeyEvent arg0) {}
+
+			@Override
+			public void keyTyped(KeyEvent event) {
+				if(event.getKeyChar() == '\n') {
+					updatePaperList();
+				}
+			}
+			
+		});
 		window.addRelevantPaperButton.addActionListener(this);
 		
 		eventDispatcher.addEventListener(this, EventType.PAPER_BASE_IMPORT_PAPERS);
 		eventDispatcher.addEventListener(this, EventType.PAPER_BASE_PAPERS_FILTERED);
+		eventDispatcher.addEventListener(this, EventType.PAPER_BASE_UPDATE_PAPER_LIST);
+		eventDispatcher.addEventListener(this, EventType.PAPER_BASE_PAPER_UPDATE_COMPLETE);
 		
 		updatePaperList();
 	}
@@ -81,11 +103,6 @@ public class PaperBase implements ActionListener, CaretListener, EventHandler, L
 	}
 
 	@Override
-	public void caretUpdate(CaretEvent event) {
-		this.updatePaperList();
-	}
-
-	@Override
 	public void handleEvent(Event<?> event) {
 		if(event.eventType == EventType.PAPER_BASE_IMPORT_PAPERS) {
 			Paper[] loadedPapers = (Paper[]) event.getEventParameterObject();
@@ -95,16 +112,23 @@ public class PaperBase implements ActionListener, CaretListener, EventHandler, L
 				progressWindow.incrementProgress(1);
 			}
 			updatePaperList();
-			WorkerThread.enqueue(new PaperBaseSaver(backend.papers.getAllPapers()));
+			WorkerThread.backgroundIOThread.enqueue(new PaperBaseSaver(backend.papers.getAllPapers()));
 			progressWindow.destroy();
 		} else if(event.eventType == EventType.PAPER_BASE_PAPERS_FILTERED) {
 			Paper[] filteredPapers = (Paper[]) event.getEventParameterObject();
 			this.currentDisplayedPapers = filteredPapers;
+		} else if(event.eventType == EventType.PAPER_BASE_UPDATE_PAPER_LIST) {
+			updatePaperList();
+		} else if(event.eventType == EventType.PAPER_BASE_PAPER_UPDATE_COMPLETE) {
+			this.isUpdatingPapers = false;
 		}
 	}
 
 	private void updatePaperList() {
-		WorkerThread.enqueue(new PaperUpdater(this.window, this.backend, this.paperTableModel, eventDispatcher));
+		if(!isUpdatingPapers) {
+			this.isUpdatingPapers = true;
+			WorkerThread.guiActivitiesThread.enqueue(new PaperUpdater(this.window, this.backend, this.paperTableModel, eventDispatcher));
+		}
 	}
 
 	@Override
@@ -116,7 +140,10 @@ public class PaperBase implements ActionListener, CaretListener, EventHandler, L
 		if(index < window.paperTable.getModel().getRowCount()) {
 			int modelIndex = window.paperTable.convertRowIndexToModel(index);
 			Paper selectedPaper = currentDisplayedPapers[modelIndex];
-			eventDispatcher.dispatchEvent(new Event<Paper>(EventType.PAPER_SELECTED, selectedPaper));
+			if(!selectedPaper.equals(currentSelectedPaper)) {
+				currentSelectedPaper = selectedPaper;
+				eventDispatcher.dispatchEvent(new Event<Paper>(EventType.PAPER_SELECTED, selectedPaper));
+			}
 		}
 	}
 }

@@ -34,7 +34,7 @@ public class IdeaBackend {
 	}
 	
 	public void writeCache() {
-		WorkerThread.enqueue(new Runnable() {
+		WorkerThread.backgroundIOThread.enqueue(new Runnable() {
 			@Override
 			public void run() {
 				IdeaCache.store(ideaList);

@@ -38,7 +38,7 @@ public class PaperImportHandler implements ActionListener {
 		
 		if(result == JFileChooser.APPROVE_OPTION) {
 			File chosenFile = fileChooser.getSelectedFile();
-			WorkerThread.enqueue(new Runnable() {
+			WorkerThread.backgroundIOThread.enqueue(new Runnable() {
 				public void run() {
 					Paper[] loadedPapers = PaperLoader.loadPapers(chosenFile, window);
 					eventDispatcher.dispatchEvent(new Event<Paper[]>(EventType.PAPER_BASE_IMPORT_PAPERS, loadedPapers));
