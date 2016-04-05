@@ -10,7 +10,7 @@ public class ProgressWindow {
 	private final JDialog frame;
 	private final JProgressBar progressBar;
 	private double progress = 0;
-	private final double totalItems;
+	private double totalItems;
 
 	public ProgressWindow(PaperTrackerWindow window, int totalItems, String name) {
 		this.frame = new JDialog(window, name);
@@ -32,6 +32,17 @@ public class ProgressWindow {
 	public synchronized void incrementProgress(double amount) {
 		progress += amount;
 		this.progressBar.setValue((int) ((progress / totalItems) * 100));
+	}
+	
+	public void makeProgressBarIndeterminate(boolean indeterminate) {
+		this.progressBar.setIndeterminate(indeterminate);
+	}
+
+	public void reuse(int totalItems, String title) {
+		frame.setTitle(title);
+		this.progress = 0;
+		this.totalItems = totalItems;
+		progressBar.setIndeterminate(false);
 	}
 
 }

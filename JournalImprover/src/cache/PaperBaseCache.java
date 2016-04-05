@@ -40,6 +40,8 @@ public class PaperBaseCache {
 		}
 
 		try {
+			ProgressWindow window = new ProgressWindow(null, 1, "Reading paper cache file..");
+			window.makeProgressBarIndeterminate(true);
 			String documentContent = IOUtils.readFileContents(cacheFile);
 			documentContent = cleanInvalidCharacters(documentContent);
 			Builder builder = new Builder();
@@ -50,7 +52,7 @@ public class PaperBaseCache {
 			Elements cachedPapers = rootElement.getChildElements();
 
 			HashMap<String, Paper> paperCache = new HashMap<String, Paper>();
-			ProgressWindow window = new ProgressWindow(null, cachedPapers.size(), "Loading paper cache..");
+			window.reuse(cachedPapers.size(), "Loading paper cache..");
 
 			for(int i = 0; i < cachedPapers.size(); i++) {
 				Element paperElement = cachedPapers.get(i);

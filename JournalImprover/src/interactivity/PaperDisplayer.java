@@ -2,6 +2,7 @@ package interactivity;
 
 import java.util.Arrays;
 
+import backend.Backend;
 import data.Author;
 import data.Date;
 import data.Paper;
@@ -16,11 +17,13 @@ public class PaperDisplayer implements EventHandler {
 
 	private final PaperTrackerWindow window;
 	private final EventDispatcher eventDispatcher;
+	private final Backend backend;
 	private Paper currentSelectedPaper = new Paper(new DataSource[0], "", "", null, new Author[]{new Author("", "", new String[0])}, new Date(0, 0, 0), "", "", "", "");
 
-	public PaperDisplayer(PaperTrackerWindow window, EventDispatcher mainDispatcher) {
+	public PaperDisplayer(Backend backend, PaperTrackerWindow window, EventDispatcher mainDispatcher) {
 		this.window = window;
 		this.eventDispatcher = mainDispatcher;
+		this.backend = backend;
 		
 		eventDispatcher.addEventListener(this, EventType.PAPER_SELECTED);
 		

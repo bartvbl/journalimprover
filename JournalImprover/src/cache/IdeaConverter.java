@@ -1,5 +1,6 @@
 package cache;
 
+import backend.PaperBackend;
 import data.Idea;
 import data.Paper;
 import interactivity.paperBase.PaperBase;
@@ -31,7 +32,7 @@ public class IdeaConverter {
 		return ideaElement;
 	}
 
-	public static Idea convertXMLToIdea(Element element, PaperBase paperBase) {
+	public static Idea convertXMLToIdea(Element element, PaperBackend papers) {
 		String name = element.getAttributeValue("name");
 		
 		Idea idea = new Idea(name);
@@ -41,7 +42,7 @@ public class IdeaConverter {
 		
 		for(int i = 0; i < paperElements.size(); i++) {
 			String paperTitle = paperElements.get(i).getAttributeValue("title");
-			Paper paper = paperBase.getPaperByTitle(paperTitle);
+			Paper paper = papers.getPaperByTitle(paperTitle);
 			idea.relevantPapers.add(paper);
 		}
 		

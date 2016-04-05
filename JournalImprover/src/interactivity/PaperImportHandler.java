@@ -6,6 +6,7 @@ import java.io.File;
 
 import javax.swing.JFileChooser;
 
+import backend.Backend;
 import data.Paper;
 import gui.PaperTrackerWindow;
 import gui.ProgressWindow;
@@ -18,10 +19,12 @@ public class PaperImportHandler implements ActionListener {
 
 	private final PaperTrackerWindow window;
 	private final EventDispatcher eventDispatcher;
+	private final Backend backend;
 
-	public PaperImportHandler(PaperTrackerWindow window, EventDispatcher mainDispatcher) {
+	public PaperImportHandler(Backend backend, PaperTrackerWindow window, EventDispatcher mainDispatcher) {
 		this.window = window;
 		this.eventDispatcher = mainDispatcher;
+		this.backend = backend;
 		
 		window.importPaperHTMLItem.addActionListener(this);
 	}

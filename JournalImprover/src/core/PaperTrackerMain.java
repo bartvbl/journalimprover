@@ -1,5 +1,6 @@
 package core; 
 
+import backend.Backend;
 import gui.PaperTrackerWindow;
 import gui.SwingUtils;
 import interactivity.CommentsTracker;
@@ -17,12 +18,14 @@ public class PaperTrackerMain {
 		PaperTrackerWindow window = new PaperTrackerWindow();
 		EventDispatcher mainDispatcher = new EventDispatcher();
 		
-		PaperBase paperBase = new PaperBase(window, mainDispatcher);
-		new PaperImportHandler(window, mainDispatcher);
-		new PaperDisplayer(window, mainDispatcher);
-		new IdeaTracker(paperBase, window, mainDispatcher);
-		new CommentsTracker(paperBase, window, mainDispatcher);
-		new OnlinePaperImportHandler(window, mainDispatcher);
+		Backend backend = new Backend();
+		
+		new PaperBase(backend, window, mainDispatcher);
+		new PaperImportHandler(backend, window, mainDispatcher);
+		new PaperDisplayer(backend, window, mainDispatcher);
+		new IdeaTracker(backend, window, mainDispatcher);
+		new CommentsTracker(backend, window, mainDispatcher);
+		new OnlinePaperImportHandler(backend, window, mainDispatcher);
 		
 		window.setTitle("Paper Tracker");
 		window.setVisible(true);

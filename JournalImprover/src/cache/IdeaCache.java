@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
+import backend.PaperBackend;
 import data.Idea;
 import data.Paper;
 import interactivity.paperBase.PaperBase;
@@ -32,7 +33,7 @@ public class IdeaCache {
 		IOUtils.writeXMLDocument(rootElement, cacheFile);
 	}
 
-	public static ArrayList<Idea> load(PaperBase paperBase) {
+	public static ArrayList<Idea> load(PaperBackend papers) {
 		
 		if(!cacheFile.exists()) {
 			return new ArrayList<Idea>();
@@ -48,7 +49,7 @@ public class IdeaCache {
 			Elements ideaElements = document.getRootElement().getChildElements();
 			
 			for(int i = 0; i < ideaElements.size(); i++) {
-				Idea idea = IdeaConverter.convertXMLToIdea(ideaElements.get(i), paperBase);
+				Idea idea = IdeaConverter.convertXMLToIdea(ideaElements.get(i), papers);
 				ideas.add(idea);
 			}
 			

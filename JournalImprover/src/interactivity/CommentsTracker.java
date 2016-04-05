@@ -10,6 +10,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 
+import backend.Backend;
 import cache.CommentCache;
 import data.Comment;
 import data.Paper;
@@ -24,18 +25,17 @@ import lib.util.WorkerThread;
 
 public class CommentsTracker implements EventHandler {
 
-	private final PaperBase paperBase;
 	private final PaperTrackerWindow window;
 	private final EventDispatcher eventDispatcher;
+	private final Backend backend;
 	
-	private final HashMap<String, Comment> commentMap = CommentCache.load();
 	private final DefaultComboBoxModel<String> ratingBoxModel;
 	
 	private Paper currentSelectedPaper = null;
 	private boolean isSwitchingPaper = false;
 
-	public CommentsTracker(PaperBase paperBase, PaperTrackerWindow window, EventDispatcher mainDispatcher) {
-		this.paperBase = paperBase;
+	public CommentsTracker(Backend backend, PaperTrackerWindow window, EventDispatcher mainDispatcher) {
+		this.backend = backend;
 		this.window = window;
 		this.eventDispatcher = mainDispatcher;
 		
@@ -85,19 +85,14 @@ public class CommentsTracker implements EventHandler {
 		if(currentSelectedPaper == null) {
 			return;
 		}
-		Comment comment = commentMap.get(this.currentSelectedPaper.title);
+		Comment comment = backend.comments.getCommentByPaperTitle(this.currentSelectedPaper.title);
 		if(comment != null) {
 			comment.comments = window.paperCommentsField.getText();
 			comment.rating = Rating.fromIndex(window.ratingComboBox.getSelectedIndex());
 			comment.isRead = window.paperReadCheckbox.isSelected();
 			comment.isSeen = window.seenCheckBox.isSelected();
 			
-			WorkerThread.enqueue(new Runnable() {
-				@Override
-				public void run() {
-					CommentCache.write(commentMap);
-				}
-			});
+			backend.comments.writeCache();
 		}		
 	}
 
@@ -108,7 +103,7 @@ public class CommentsTracker implements EventHandler {
 			Paper selectedPaper = (Paper) event.getEventParameterObject();
 			this.currentSelectedPaper = selectedPaper;
 			
-			Comment comment = commentMap.get(selectedPaper.title);
+			Comment comment = backend.comments.getCommentByPaperTitle(selectedPaper.title);
 			if(comment != null) {
 				window.paperCommentsField.setText(comment.comments);
 				window.ratingComboBox.setSelectedIndex(comment.rating.index);
@@ -121,7 +116,7 @@ public class CommentsTracker implements EventHandler {
 				window.seenCheckBox.setSelected(false);
 				
 				Comment newComment = new Comment();
-				commentMap.put(selectedPaper.title, newComment);
+				backend.comments.addCommentByPaperTitle(selectedPaper.title, newComment);
 			}
 			this.isSwitchingPaper  = false;
 		}

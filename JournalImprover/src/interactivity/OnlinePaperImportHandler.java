@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JFrame;
 
+import backend.Backend;
 import gui.PaperImportWindow;
 import gui.PaperTrackerWindow;
 import lib.events.EventDispatcher;
@@ -13,9 +14,11 @@ public class OnlinePaperImportHandler {
 
 	private final PaperTrackerWindow window;
 	private final EventDispatcher eventDispatcher;
+	private final Backend backend;
 
-	public OnlinePaperImportHandler(PaperTrackerWindow window, EventDispatcher mainDispatcher) {
+	public OnlinePaperImportHandler(Backend backend, PaperTrackerWindow window, EventDispatcher mainDispatcher) {
 		this.window = window;
+		this.backend = backend;
 		this.eventDispatcher = mainDispatcher;
 		
 		window.searchOnlineMenuItem.addActionListener(new ActionListener() {

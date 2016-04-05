@@ -17,6 +17,7 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 
+import backend.Backend;
 import cache.IdeaCache;
 import data.Idea;
 import data.Paper;
@@ -32,19 +33,15 @@ public class IdeaTracker implements EventHandler {
 
 	private final PaperTrackerWindow window;
 	private final EventDispatcher eventDispatcher;
+	private final Backend backend;
 	
 	private final DefaultListModel<String> ideaListModel;
-	private final ArrayList<Idea> ideaList;
-	
 	private final DefaultTableModel relevantTableModel;
-	private final PaperBase paperBase;
 	
-	public IdeaTracker(PaperBase paperBase, PaperTrackerWindow window, EventDispatcher mainDispatcher) {
+	public IdeaTracker(Backend backend, PaperTrackerWindow window, EventDispatcher mainDispatcher) {
 		this.window = window;
-		this.paperBase = paperBase;
 		this.eventDispatcher = mainDispatcher;
-		
-		this.ideaList = IdeaCache.load(paperBase);
+		this.backend = backend;
 		
 		this.ideaListModel = new DefaultListModel<String>();
 		window.ideaList.setModel(this.ideaListModel);
@@ -52,7 +49,7 @@ public class IdeaTracker implements EventHandler {
 		window.ideaList.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent event) {
 				int selectedIndex = window.ideaList.getSelectionModel().getLeadSelectionIndex();
-				if(selectedIndex < 0 || selectedIndex >= ideaList.size()) {
+				if(selectedIndex < 0 || selectedIndex >= backend.ideas.getIdeaCount()) {
 					return;
 				}
 				updateIdeaButtons();
@@ -70,16 +67,16 @@ public class IdeaTracker implements EventHandler {
 		window.deleteIdeaButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				int selectedIndex = window.ideaList.getSelectionModel().getLeadSelectionIndex();
-				if(selectedIndex < 0 || selectedIndex >= ideaList.size()) {
+				if(selectedIndex < 0 || selectedIndex >= backend.ideas.getIdeaCount()) {
 					return;
 				}
 				int answer = JOptionPane.showConfirmDialog(window, "Delete this idea?", "Delete", JOptionPane.YES_NO_OPTION);
 				if(answer == JOptionPane.OK_OPTION) {
-					ideaList.remove(selectedIndex);
+					backend.ideas.removeIdeaByIndex(selectedIndex);
 					updateIdeaButtons();
 					refreshIdeaList();
 					refreshRelevantPaperList();
-					writeCache();
+					backend.ideas.writeCache();
 				}				
 			}
 		});
@@ -133,7 +130,7 @@ public class IdeaTracker implements EventHandler {
 					return;
 				}
 				selectedIdea.notes = window.notesIdeaBox.getText();
-				writeCache();
+				backend.ideas.writeCache();
 			}
 			
 		});
@@ -154,7 +151,7 @@ public class IdeaTracker implements EventHandler {
 				int modelIndex = window.relevantPaperTable.convertRowIndexToModel(selectedIndex);
 				selectedIdea.relevantPapers.remove(modelIndex);
 				refreshRelevantPaperList();
-				writeCache();
+				backend.ideas.writeCache();
 			}
 		});
 		
@@ -169,9 +166,9 @@ public class IdeaTracker implements EventHandler {
 		if(window.ideaNameField.getText().equals("")) {
 			return;
 		}
-		this.ideaList.add(new Idea(window.ideaNameField.getText()));
+		backend.ideas.addIdea(new Idea(window.ideaNameField.getText()));
 		window.ideaNameField.setText("");
-		writeCache();
+		backend.ideas.writeCache();
 		refreshIdeaList();
 	}
 	
@@ -189,7 +186,7 @@ public class IdeaTracker implements EventHandler {
 				int currentIdeaIndex = getSelectedIdeaIndex();
 				
 				ideaListModel.clear();
-				for(Idea idea : ideaList) {
+				for(Idea idea : backend.ideas.all()) {
 					ideaListModel.addElement(idea.name);
 				}
 				
@@ -221,7 +218,7 @@ public class IdeaTracker implements EventHandler {
 			Idea selectedIdea = getSelectedIdea();
 			if(!selectedIdea.relevantPapers.contains(paper)) {
 				selectedIdea.relevantPapers.add(paper);
-				writeCache();
+				backend.ideas.writeCache();
 				refreshRelevantPaperList();
 			}
 		}
@@ -233,18 +230,11 @@ public class IdeaTracker implements EventHandler {
 	
 	private Idea getSelectedIdea() {
 		int selectedIndex = getSelectedIdeaIndex();
-		if(selectedIndex < 0 || selectedIndex >= ideaList.size()) {
+		if(selectedIndex < 0 || selectedIndex >= backend.ideas.getIdeaCount()) {
 			return null;
 		}
-		return ideaList.get(selectedIndex);
+		return backend.ideas.getIdeaByIndex(selectedIndex);
 	}
 
-	private void writeCache() {
-		WorkerThread.enqueue(new Runnable() {
-			@Override
-			public void run() {
-				IdeaCache.store(ideaList);
-			}
-		});
-	}
+	
 }

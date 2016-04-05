@@ -17,6 +17,7 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 
+import backend.Backend;
 import cache.PaperBaseCache;
 import data.Paper;
 import gui.PaperTrackerWindow;
@@ -32,17 +33,18 @@ public class PaperBase implements ActionListener, CaretListener, EventHandler, L
 
 	private final PaperTrackerWindow window;
 	private final EventDispatcher eventDispatcher;
+	private final Backend backend;
 	
 	private final PaperTrackerTableModel paperTableModel;
 	
-	private final HashMap<String, Paper> paperCollection;
 	private final DefaultListSelectionModel paperTableSelectionModel;
 	
 	private Paper[] currentDisplayedPapers = new Paper[0];
 
-	public PaperBase(PaperTrackerWindow window, EventDispatcher mainDispatcher) {
+	public PaperBase(Backend backend, PaperTrackerWindow window, EventDispatcher mainDispatcher) {
 		this.window = window;
 		this.eventDispatcher = mainDispatcher;
+		this.backend = backend;
 		
 		this.paperTableModel = new PaperTrackerTableModel();
 		this.paperTableSelectionModel = new DefaultListSelectionModel();
@@ -64,8 +66,6 @@ public class PaperBase implements ActionListener, CaretListener, EventHandler, L
 		
 		eventDispatcher.addEventListener(this, EventType.PAPER_BASE_IMPORT_PAPERS);
 		eventDispatcher.addEventListener(this, EventType.PAPER_BASE_PAPERS_FILTERED);
-		
-		paperCollection = PaperBaseCache.load();
 		
 		updatePaperList();
 	}
@@ -91,15 +91,11 @@ public class PaperBase implements ActionListener, CaretListener, EventHandler, L
 			Paper[] loadedPapers = (Paper[]) event.getEventParameterObject();
 			ProgressWindow progressWindow = new ProgressWindow(window, loadedPapers.length, "Import progress");
 			for(Paper paper : loadedPapers) {
-				if(!paperCollection.containsKey(paper.title)) {
-					paperCollection.put(paper.title, paper);
-				} else {
-					paperCollection.get(paper.title).update(paper);
-				}
+				backend.papers.registerPaper(paper);
 				progressWindow.incrementProgress(1);
 			}
 			updatePaperList();
-			WorkerThread.enqueue(new PaperBaseSaver(paperCollection.values()));
+			WorkerThread.enqueue(new PaperBaseSaver(backend.papers.getAllPapers()));
 			progressWindow.destroy();
 		} else if(event.eventType == EventType.PAPER_BASE_PAPERS_FILTERED) {
 			Paper[] filteredPapers = (Paper[]) event.getEventParameterObject();
@@ -108,7 +104,7 @@ public class PaperBase implements ActionListener, CaretListener, EventHandler, L
 	}
 
 	private void updatePaperList() {
-		WorkerThread.enqueue(new PaperUpdater(this.window, this.paperTableModel, paperCollection.values(), eventDispatcher));
+		WorkerThread.enqueue(new PaperUpdater(this.window, this.paperTableModel, backend.papers.getAllPapers(), eventDispatcher));
 	}
 
 	@Override
@@ -123,9 +119,4 @@ public class PaperBase implements ActionListener, CaretListener, EventHandler, L
 			eventDispatcher.dispatchEvent(new Event<Paper>(EventType.PAPER_SELECTED, selectedPaper));
 		}
 	}
-
-	public Paper getPaperByTitle(String paperTitle) {
-		return paperCollection.get(paperTitle);
-	}
-
 }

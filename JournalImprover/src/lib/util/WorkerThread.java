@@ -15,7 +15,9 @@ public class WorkerThread extends Thread {
 				synchronized(workQueue) {
 					task = workQueue.dequeue();
 				}
+				System.out.println("WorkerThread: I'm running " + task);
 				task.run();
+				System.out.println("WorkerThread: I've completed " + task);
 			} else {
 				try {
 					Thread.sleep(15);

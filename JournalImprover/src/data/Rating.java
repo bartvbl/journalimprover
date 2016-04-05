@@ -7,7 +7,8 @@ public enum Rating {
 	Mediocre			(3, "Mediocre"), 
 	Good				(4, "Good"), 
 	Very_Relevant		(5, "Very relevant"),
-	Very_Interesting	(6, "Very interesting")
+	Very_Interesting	(6, "Very interesting"),
+	Irrelevant			(7, "Irrelevant"), 
 	;
 	
 	public final int index;
