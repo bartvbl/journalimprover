@@ -20,7 +20,7 @@ import querying.DataSource;
 
 public class IEEEXPloreLoader {
 
-	private static final String baseURL = "http://ieeexplore.ieee.org/gateway/ipsSearch.jsp?";
+	private static final String baseURL = "ieeexplore.ieee.org/gateway/ipsSearch.jsp?";
 	private static final int papersPerRequest = 1000;
 	private static final int numRequests = 5;
 	

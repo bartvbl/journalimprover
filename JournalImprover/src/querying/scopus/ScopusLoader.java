@@ -22,7 +22,7 @@ import querying.DataSource;
 
 public class ScopusLoader {
 
-	private static final String baseURL = "http://api.elsevier.com/content/search/scopus";
+	private static final String baseURL = "api.elsevier.com/content/search/scopus";
 	private static final int papersPerRequest = 100;
 	private static final int numRequests = 30;
 	

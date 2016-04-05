@@ -22,7 +22,7 @@ import querying.DataSource;
 
 public class ScienceDirectLoader {
 
-	private static final String baseURL = "http://api.elsevier.com/content/search/scidir";
+	private static final String baseURL = "api.elsevier.com/content/search/scidir";
 	private static final int papersPerRequest = 200;
 	private static final int numRequests = 15;
 	

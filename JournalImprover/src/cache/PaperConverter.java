@@ -26,7 +26,6 @@ public class PaperConverter {
 		Attribute publisherAttribute = new Attribute("publisher", paper.publisher);
 		
 		Element originsElement = new Element("origins");
-		System.out.println(paper.origins);
 		for(DataSource origin : paper.origins) {
 			Element originElement = new Element("origin");
 			originElement.appendChild(origin.name());

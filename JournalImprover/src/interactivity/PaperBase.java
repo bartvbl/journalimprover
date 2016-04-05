@@ -152,9 +152,11 @@ public class PaperBase implements ActionListener, CaretListener, EventHandler, L
 		if(index < 0 || index >= currentDisplayedPapers.length) {
 			return;
 		}
-		int modelIndex = window.paperTable.convertRowIndexToModel(index);
-		Paper selectedPaper = currentDisplayedPapers[modelIndex];
-		eventDispatcher.dispatchEvent(new Event<Paper>(EventType.PAPER_SELECTED, selectedPaper));
+		if(index < window.paperTable.getModel().getRowCount()) {
+			int modelIndex = window.paperTable.convertRowIndexToModel(index);
+			Paper selectedPaper = currentDisplayedPapers[modelIndex];
+			eventDispatcher.dispatchEvent(new Event<Paper>(EventType.PAPER_SELECTED, selectedPaper));
+		}
 	}
 
 	public Paper getPaperByTitle(String paperTitle) {

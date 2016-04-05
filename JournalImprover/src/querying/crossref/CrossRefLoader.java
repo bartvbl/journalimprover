@@ -17,7 +17,7 @@ import data.Paper;
 import interactivity.OnlineSearchHandler;
 
 public class CrossRefLoader {
-	private static final String baseURL = "http://api.crossref.org/";
+	private static final String baseURL = "api.crossref.org/";
 	private static final int papersPerRequest = 1000;
 	private static final int numRequests = 5;
 
@@ -76,8 +76,8 @@ public class CrossRefLoader {
 			String publisher = entry.getString("publisher");
 			String issue = entry.has("issue") ? entry.getString("issue") : "";
 			String DOI = entry.getString("DOI");
-			String type = entry.getString("type");
-			Date created = parseDate(entry.getJSONObject("created"));
+			String type = ""; //entry.getString("type");
+			Date created = !entry.isNull("created") ? parseDate(entry.getJSONObject("created")) : new Date(0, 0, 0);
 			String page = entry.has("page") ? entry.getString("page") : "";
 			String source = entry.getString("source");
 			String title = entry.has("title") && entry.getJSONArray("title").length() > 0 ? entry.getJSONArray("title").getString(0) : "";

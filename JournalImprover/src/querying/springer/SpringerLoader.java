@@ -18,7 +18,7 @@ import data.Paper;
 import interactivity.OnlineSearchHandler;
 
 public class SpringerLoader {
-	private static final String baseURL = "http://api.springer.com/meta/v1/json";
+	private static final String baseURL = "api.springer.com/meta/v1/json";
 	private static final int papersPerRequest = 100;
 	private static final int numRequests = 30;
 
@@ -44,7 +44,7 @@ public class SpringerLoader {
 	private static Paper[] query(String query, int start, int count) throws IOException {
 		HashSet<String> entryMap = new HashSet<String>();
 		String url = baseURL + "?" +
-				"q=" + query + "&" + 
+				"q=\"" + query + "\"&" + 
 				"s=" + (start + 1) + "&" +
 				"p=" + (count) + "&" +
 				"api_key=" + Config.get("Springer");

@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
 
@@ -13,11 +15,17 @@ import nu.xom.Element;
 
 public class HTTPRequester {
 	public static String request(String address) throws IOException {
+		try {
 		System.setProperty("http.keepAlive", "false");
-		URL url = new URL(address);
+		URL url = new URL("http://" + address);
+		URI uri = new URI(url.getProtocol(), url.getUserInfo(), url.getHost(), url.getPort(), url.getPath(), url.getQuery(), url.getRef());
+		url = uri.toURL();
 		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 		connection.setRequestProperty("Connection", "close");
 		return readConnectionResponse(connection);
+		} catch (URISyntaxException e) {
+			throw new IOException("URI conversion failed. ", e);
+		}
 	}
 
 	private static String readConnectionResponse(HttpURLConnection connection) throws IOException {
