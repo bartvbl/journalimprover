@@ -89,7 +89,7 @@ public class ScienceDirectLoader {
 			// dc:identifier - unsupported
 			// eid - unsupported
 			// prism:url - unsupported
-			String title = entry.getFirstChildElement("title", URIMap.get("dc")).getValue();
+			String title = getEntryValue(entry, "title", "dc", getEntryValue(entry, "issueName", "prism", "[untitled]"));
 			// dc:creator - unsupported
 			String abstractText = getEntryValue(entry, "description", "dc", "");
 			// prism:publicationName - unsupported

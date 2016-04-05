@@ -66,21 +66,10 @@ public class PaperBase implements ActionListener, EventHandler, ListSelectionLis
 		window.paperTable.setDragEnabled(false);
 		window.paperTable.setRowSorter(new TableRowSorter<PaperTrackerTableModel>(paperTableModel));
 		
-		window.searchPapersField.addKeyListener(new KeyListener() {
-
-			@Override
-			public void keyPressed(KeyEvent arg0) {}
-
-			@Override
-			public void keyReleased(KeyEvent arg0) {}
-
-			@Override
-			public void keyTyped(KeyEvent event) {
-				if(event.getKeyChar() == '\n') {
-					updatePaperList();
-				}
+		window.searchPapersField.addCaretListener(new CaretListener() {
+			public void caretUpdate(CaretEvent arg0) {
+				updatePaperList();
 			}
-			
 		});
 		window.addRelevantPaperButton.addActionListener(this);
 		
