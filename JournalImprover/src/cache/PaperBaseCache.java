@@ -24,45 +24,57 @@ public class PaperBaseCache {
 		Element rootElement = new Element("paperCache");
 		for(Paper paper : papers) {
 			Element paperElement = PaperConverter.convertPaperToXML(paper);
-			
+
 			rootElement.appendChild(paperElement);
 		}
-		
+
 		IOUtils.writeXMLDocument(rootElement, cacheFile);
 	}
 
-	
+
 
 	public static HashMap<String, Paper> load() {
 		if(!cacheFile.exists()) {
 			return new HashMap<String, Paper>();
 		}
-		
+
 		try {
 			String documentContent = IOUtils.readFileContents(cacheFile);
+			documentContent = cleanInvalidCharacters(documentContent);
 			Builder builder = new Builder();
 			InputStream stream = new ByteArrayInputStream(documentContent.getBytes(StandardCharsets.UTF_8));
 			Document document = builder.build(stream);
-			
+
 			Element rootElement = document.getRootElement();
 			Elements cachedPapers = rootElement.getChildElements();
-			
+
 			HashMap<String, Paper> paperCache = new HashMap<String, Paper>();
-			
+
 			for(int i = 0; i < cachedPapers.size(); i++) {
 				Element paperElement = cachedPapers.get(i);
-				
+
 				Paper paper = PaperConverter.convertXMLToPaper(paperElement);
-				
+
 				paperCache.put(paper.title, paper);
 			}
-			
+
 			return paperCache;
 		} catch (IOException | ParsingException e) {
 			e.printStackTrace();
 			throw new RuntimeException("Failed to load cached papers :(", e);
 		}
-		
+
+	}
+
+
+
+	private static String cleanInvalidCharacters(String documentContent) {
+		String invalidCharacters = "[^"
+				+ "\u0001-\uD7FF"
+				+ "\uE000-\uFFFD"
+				+ "\ud800\udc00-\udbff\udfff"
+				+ "]+";
+		return documentContent.replaceAll(invalidCharacters, "");
 	}
 
 }
