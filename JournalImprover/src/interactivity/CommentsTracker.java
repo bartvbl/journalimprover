@@ -15,6 +15,7 @@ import data.Comment;
 import data.Paper;
 import data.Rating;
 import gui.PaperTrackerWindow;
+import interactivity.paperBase.PaperBase;
 import lib.events.Event;
 import lib.events.EventDispatcher;
 import lib.events.EventHandler;

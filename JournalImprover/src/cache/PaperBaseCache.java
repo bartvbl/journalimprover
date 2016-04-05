@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 import data.Paper;
+import gui.ProgressWindow;
 import lib.util.IOUtils;
 import nu.xom.Builder;
 import nu.xom.Document;
@@ -49,6 +50,7 @@ public class PaperBaseCache {
 			Elements cachedPapers = rootElement.getChildElements();
 
 			HashMap<String, Paper> paperCache = new HashMap<String, Paper>();
+			ProgressWindow window = new ProgressWindow(null, cachedPapers.size(), "Loading paper cache..");
 
 			for(int i = 0; i < cachedPapers.size(); i++) {
 				Element paperElement = cachedPapers.get(i);
@@ -56,7 +58,9 @@ public class PaperBaseCache {
 				Paper paper = PaperConverter.convertXMLToPaper(paperElement);
 
 				paperCache.put(paper.title, paper);
+				window.incrementProgress(1);
 			}
+			window.destroy();
 
 			return paperCache;
 		} catch (IOException | ParsingException e) {

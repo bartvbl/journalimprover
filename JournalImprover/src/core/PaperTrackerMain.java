@@ -5,9 +5,9 @@ import gui.SwingUtils;
 import interactivity.CommentsTracker;
 import interactivity.IdeaTracker;
 import interactivity.OnlinePaperImportHandler;
-import interactivity.PaperBase;
 import interactivity.PaperDisplayer;
 import interactivity.PaperImportHandler;
+import interactivity.paperBase.PaperBase;
 import lib.events.EventDispatcher;
 
 public class PaperTrackerMain {

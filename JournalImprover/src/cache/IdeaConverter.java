@@ -2,7 +2,7 @@ package cache;
 
 import data.Idea;
 import data.Paper;
-import interactivity.PaperBase;
+import interactivity.paperBase.PaperBase;
 import nu.xom.Attribute;
 import nu.xom.Element;
 import nu.xom.Elements;

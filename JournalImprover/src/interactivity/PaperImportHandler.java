@@ -38,7 +38,7 @@ public class PaperImportHandler implements ActionListener {
 			WorkerThread.enqueue(new Runnable() {
 				public void run() {
 					Paper[] loadedPapers = PaperLoader.loadPapers(chosenFile, window);
-					eventDispatcher.dispatchEvent(new Event<Paper[]>(EventType.IMPORT_PAPERS, loadedPapers));
+					eventDispatcher.dispatchEvent(new Event<Paper[]>(EventType.PAPER_BASE_IMPORT_PAPERS, loadedPapers));
 				}
 			});
 		}

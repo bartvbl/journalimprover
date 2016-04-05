@@ -1,4 +1,4 @@
-package interactivity;
+package interactivity.paperBase;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -10,7 +10,6 @@ import java.util.Set;
 import javax.swing.DefaultListModel;
 import javax.swing.DefaultListSelectionModel;
 import javax.swing.ListSelectionModel;
-import javax.swing.SwingUtilities;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 import javax.swing.event.ListSelectionEvent;
@@ -22,6 +21,7 @@ import cache.PaperBaseCache;
 import data.Paper;
 import gui.PaperTrackerWindow;
 import gui.ProgressWindow;
+import interactivity.PaperTrackerTableModel;
 import lib.events.Event;
 import lib.events.EventDispatcher;
 import lib.events.EventHandler;
@@ -57,12 +57,13 @@ public class PaperBase implements ActionListener, CaretListener, EventHandler, L
 		window.paperTable.setSelectionModel(paperTableSelectionModel);
 		
 		window.paperTable.setDragEnabled(false);
-		window.paperTable.setRowSorter(new TableRowSorter(paperTableModel));
+		window.paperTable.setRowSorter(new TableRowSorter<PaperTrackerTableModel>(paperTableModel));
 		
 		window.searchPapersField.addCaretListener(this);
 		window.addRelevantPaperButton.addActionListener(this);
 		
-		eventDispatcher.addEventListener(this, EventType.IMPORT_PAPERS);
+		eventDispatcher.addEventListener(this, EventType.PAPER_BASE_IMPORT_PAPERS);
+		eventDispatcher.addEventListener(this, EventType.PAPER_BASE_PAPERS_FILTERED);
 		
 		paperCollection = PaperBaseCache.load();
 		
@@ -86,7 +87,7 @@ public class PaperBase implements ActionListener, CaretListener, EventHandler, L
 
 	@Override
 	public void handleEvent(Event<?> event) {
-		if(event.eventType == EventType.IMPORT_PAPERS) {
+		if(event.eventType == EventType.PAPER_BASE_IMPORT_PAPERS) {
 			Paper[] loadedPapers = (Paper[]) event.getEventParameterObject();
 			ProgressWindow progressWindow = new ProgressWindow(window, loadedPapers.length, "Import progress");
 			for(Paper paper : loadedPapers) {
@@ -98,52 +99,16 @@ public class PaperBase implements ActionListener, CaretListener, EventHandler, L
 				progressWindow.incrementProgress(1);
 			}
 			updatePaperList();
-			WorkerThread.enqueue(new Runnable() {
-				public void run() {
-					PaperBaseCache.store(paperCollection.values());
-				}
-			});
+			WorkerThread.enqueue(new PaperBaseSaver(paperCollection.values()));
 			progressWindow.destroy();
+		} else if(event.eventType == EventType.PAPER_BASE_PAPERS_FILTERED) {
+			Paper[] filteredPapers = (Paper[]) event.getEventParameterObject();
+			this.currentDisplayedPapers = filteredPapers;
 		}
 	}
 
 	private void updatePaperList() {
-		WorkerThread.enqueue(new Runnable() {
-			public void run() {
-				String searchQuery = window.searchPapersField.getText();
-				Paper[] relevantPapers = filter(searchQuery);
-				currentDisplayedPapers = relevantPapers;
-				SwingUtilities.invokeLater(new Runnable(){
-					public void run() {
-						paperTableModel.setRowCount(0);
-						
-						for(Paper paper : relevantPapers) {
-							paperTableModel.addRow(new String[]{paper.publicationDate.toPrettyString(), paper.title});
-						}
-						window.revalidate();
-					}
-				});
-			}
-		});
-	}
-
-	private Paper[] filter(String searchQuery) {
-		if(!searchQuery.equals("")) {
-			ArrayList<Paper> relevantPapers = new ArrayList<Paper>();
-			for(Paper paper : paperCollection.values()) {
-				boolean containsTitle = paper.title == null ? false : paper.title.contains(searchQuery);
-				boolean containsAbstract = paper.abstractText == null ? false : paper.abstractText.contains(searchQuery);
-				boolean containsAuthors = paper.authors == null ? false : paper.containsAuthor(searchQuery);
-				boolean containsDate = paper.publicationDate == null ? false : paper.publicationDate.toPrettyString().contains(searchQuery);
-				if(containsTitle || containsAbstract || containsAuthors || containsDate) {
-					relevantPapers.add(paper);
-				}
-			}
-			return relevantPapers.toArray(new Paper[relevantPapers.size()]);
-		} else {
-			return paperCollection.values().toArray(new Paper[paperCollection.size()]);
-		}
-		
+		WorkerThread.enqueue(new PaperUpdater(this.window, this.paperTableModel, paperCollection.values(), eventDispatcher));
 	}
 
 	@Override

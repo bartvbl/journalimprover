@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 import data.Idea;
 import data.Paper;
-import interactivity.PaperBase;
+import interactivity.paperBase.PaperBase;
 import lib.util.IOUtils;
 import nu.xom.Attribute;
 import nu.xom.Builder;

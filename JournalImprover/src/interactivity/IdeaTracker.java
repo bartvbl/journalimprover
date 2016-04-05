@@ -21,6 +21,7 @@ import cache.IdeaCache;
 import data.Idea;
 import data.Paper;
 import gui.PaperTrackerWindow;
+import interactivity.paperBase.PaperBase;
 import lib.events.Event;
 import lib.events.EventDispatcher;
 import lib.events.EventHandler;
