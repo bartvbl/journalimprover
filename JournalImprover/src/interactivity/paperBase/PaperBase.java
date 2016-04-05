@@ -100,24 +100,28 @@ public class PaperBase implements ActionListener, EventHandler, ListSelectionLis
 				backend.papers.registerPaper(paper);
 				progressWindow.incrementProgress(1);
 			}
-			updatePaperList();
+			attemptPaperListUpdate();
 			WorkerThread.backgroundIOThread.enqueue(new PaperBaseSaver(backend.papers.getAllPapers()));
 			progressWindow.destroy();
 		} else if(event.eventType == EventType.PAPER_BASE_PAPERS_FILTERED) {
 			Paper[] filteredPapers = (Paper[]) event.getEventParameterObject();
 			this.currentDisplayedPapers = filteredPapers;
 		} else if(event.eventType == EventType.PAPER_BASE_UPDATE_PAPER_LIST) {
-			updatePaperList();
+			attemptPaperListUpdate();
 		} else if(event.eventType == EventType.PAPER_BASE_PAPER_UPDATE_COMPLETE) {
 			this.isUpdatingPapers = false;
 		}
 	}
 
-	private void updatePaperList() {
+	private void attemptPaperListUpdate() {
 		if(!isUpdatingPapers) {
-			this.isUpdatingPapers = true;
-			WorkerThread.guiActivitiesThread.enqueue(new PaperUpdater(this.window, this.backend, this.paperTableModel, eventDispatcher));
+			updatePaperList();
 		}
+	}
+
+	private void updatePaperList() {
+		this.isUpdatingPapers = true;
+		WorkerThread.guiActivitiesThread.enqueue(new PaperUpdater(this.window, this.backend, this.paperTableModel, eventDispatcher));
 	}
 
 	@Override

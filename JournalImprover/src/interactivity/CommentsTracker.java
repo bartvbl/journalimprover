@@ -4,6 +4,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.HashMap;
 
 import javax.swing.DefaultComboBoxModel;
@@ -64,6 +66,23 @@ public class CommentsTracker implements EventHandler {
 					eventDispatcher.dispatchEvent(new Event<Object>(EventType.PAPER_BASE_UPDATE_PAPER_LIST));
 				}
 			}
+		});
+		
+		window.paperTable.addKeyListener(new KeyListener() {
+
+			@Override
+			public void keyPressed(KeyEvent arg0) {}
+
+			@Override
+			public void keyReleased(KeyEvent arg0) {}
+
+			@Override
+			public void keyTyped(KeyEvent event) {
+				if(event.isControlDown() && event.getKeyChar() == 'i') {
+					window.ratingComboBox.setSelectedIndex(Rating.Irrelevant.index);
+				}
+			}
+			
 		});
 
 		window.paperReadCheckbox.addActionListener(new ActionListener() {

@@ -24,10 +24,13 @@ public class WorkerThread extends Thread {
 		while(true) {
 			if(!workQueue.isEmpty()) {
 				Runnable task;
+				
 				synchronized(workQueue) {
 					task = workQueue.dequeue();
 				}
+				System.out.println(threadName + " thread: Starting " + task);
 				task.run();
+				System.out.println(threadName + " thread: Finished " + task);
 			} else {
 				try {
 					Thread.sleep(15);

@@ -2,6 +2,8 @@ package interactivity.paperBase;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.concurrent.BrokenBarrierException;
+import java.util.concurrent.CyclicBarrier;
 
 import javax.swing.DefaultListSelectionModel;
 import javax.swing.SwingUtilities;
@@ -37,13 +39,13 @@ final class PaperUpdater implements Runnable {
 		Paper[] relevantPapers = filter(searchQuery);
 		eventDispatcher.dispatchEvent(new Event<Paper[]>(EventType.PAPER_BASE_PAPERS_FILTERED, relevantPapers));
 		boolean rowCountChanged = relevantPapers.length != paperTableModel.getRowCount();
-		
+
 		SwingUtilities.invokeLater(new Runnable(){
 			public void run() {
 				if(rowCountChanged) {
 					paperTableModel.setRowCount(0);
 				}
-				
+
 				for(int row = 0; row < relevantPapers.length; row++) {
 					Paper paper = relevantPapers[row];
 					Comment comment = backend.comments.getCommentByPaperTitle(paper.title);
@@ -56,35 +58,38 @@ final class PaperUpdater implements Runnable {
 						paperTableModel.addRow(new String[]{paper.publicationDate.toPrettyString(), rating, paper.title});
 					}
 				}
-				
+
 				eventDispatcher.dispatchEvent(new Event<Object>(EventType.PAPER_BASE_PAPER_UPDATE_COMPLETE));
-				
+
 				window.revalidate();
 			}
 		});
 	}
-	
+
 	private Paper[] filter(String searchQuery) {
 		if(!searchQuery.equals("")) {
-			ArrayList<Paper> relevantPapers = new ArrayList<Paper>();
+			final int threadCount = 12;
+
+			CyclicBarrier barrier = new CyclicBarrier(threadCount + 1);
+			ArrayList<Paper> allFoundPapers = new ArrayList<Paper>();
+
 			String[] keywords = searchQuery.replace("  ", " ").split(" ");
-			for(String keyword : keywords) {
-				for(Paper paper : papers) {
-					boolean containsTitle = paper.title == null ? false : paper.title.contains(keyword);
-					boolean containsAbstract = paper.abstractText == null ? false : paper.abstractText.contains(keyword);
-					boolean containsAuthors = paper.authors == null ? false : paper.containsAuthor(keyword);
-					boolean containsDate = paper.publicationDate == null ? false : paper.publicationDate.toPrettyString().contains(keyword);
-					if(containsTitle || containsAbstract || containsAuthors || containsDate) {
-						if(!relevantPapers.contains(paper)) {
-							relevantPapers.add(paper);
-						}
-					}
-				}
+			Paper[] allPapers = papers.toArray(new Paper[papers.size()]);
+			
+			int papersPerThread = papers.size() / threadCount;
+
+			for(int thread = 0; thread < threadCount; thread++) {
+				new PaperSearchThread(this, keywords, allPapers, papersPerThread, barrier, thread, allFoundPapers).start();
 			}
-			return relevantPapers.toArray(new Paper[relevantPapers.size()]);
+			try {
+				barrier.await();
+			} catch (InterruptedException | BrokenBarrierException e) {
+				e.printStackTrace();
+			}
+			return allFoundPapers.toArray(new Paper[allFoundPapers.size()]);
 		} else {
 			return papers.toArray(new Paper[papers.size()]);
 		}
-		
+
 	}
 }
